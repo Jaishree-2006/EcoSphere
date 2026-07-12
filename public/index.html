@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoSphere | ESG Management Platform</title>
+  <!-- Google Fonts: Patrick Hand, Architects Daughter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Architects+Daughter&display=swap" rel="stylesheet">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- FontAwesome (for icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Style Sheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- WELCOME / LANDING PAGE -->
+  <section class="welcome-page" id="welcome-screen">
+    <div class="welcome-shell">
+      <div class="welcome-header-row">
+        <div class="welcome-brand-block">
+          <div class="welcome-kicker">EcoSphere</div>
+          <h1 class="welcome-title">One platform for ESG, CSR, compliance, and employee engagement.</h1>
+          <p class="welcome-copy">
+            Track carbon, manage policies, run CSR programs, and reward sustainability behavior from a single internal workspace built for enterprise teams.
+          </p>
+          <div class="welcome-actions">
+            <button class="btn-sketch btn-emerald" onclick="window.location.href='login.html'"><i class="fa-solid fa-door-open"></i> Go to Login</button>
+            <button class="btn-sketch btn-grey" onclick="document.getElementById('feature-grid').scrollIntoView({ behavior: 'smooth' })"><i class="fa-solid fa-layer-group"></i> Explore Features</button>
+          </div>
+          <div class="welcome-role-chips">
+            <span>Admin</span>
+            <span>ESG Manager</span>
+            <span>HR</span>
+            <span>Auditor</span>
+            <span>Department Head</span>
+            <span>Employee</span>
+          </div>
+        </div>
+
+        <div class="welcome-summary-card card-sketch">
+          <div class="card-title-sketch"><i class="fa-solid fa-shield-halved text-emerald"></i> Secure Enterprise Access</div>
+          <div class="welcome-summary-list">
+            <div><strong>Authentication:</strong> Email/password and employee ID sign-in live on a separate login page.</div>
+            <div><strong>Access control:</strong> Role-based modules for each team.</div>
+            <div><strong>Security:</strong> Session checks, audit logging, and locked API routes.</div>
+            <div><strong>Login flow:</strong> Press Go to Login to open the dedicated auth page.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="welcome-stats-grid">
+        <div class="welcome-stat card-sketch">
+          <span class="welcome-stat-label">Core Modules</span>
+          <span class="welcome-stat-value">6</span>
+          <span class="welcome-stat-copy">Environmental, Social, Governance, Gamification, Reports, Settings</span>
+        </div>
+        <div class="welcome-stat card-sketch">
+          <span class="welcome-stat-label">User Groups</span>
+          <span class="welcome-stat-value">6+</span>
+          <span class="welcome-stat-copy">Teams see only the areas they are authorized to access</span>
+        </div>
+        <div class="welcome-stat card-sketch">
+          <span class="welcome-stat-label">Automation</span>
+          <span class="welcome-stat-value">Real-time</span>
+          <span class="welcome-stat-copy">Automatic emissions, reminders, badges, and score updates</span>
+        </div>
+      </div>
+
+      <div class="welcome-feature-grid" id="feature-grid">
+        <article class="welcome-feature card-sketch feature-env">
+          <div class="card-title-sketch">Environmental Management</div>
+          <p>Calculate carbon emissions, configure factors, compare targets, and track department footprints.</p>
+        </article>
+        <article class="welcome-feature card-sketch feature-soc">
+          <div class="card-title-sketch">Social Responsibility</div>
+          <p>Run CSR activities, manage participation, track volunteering hours, and measure engagement.</p>
+        </article>
+        <article class="welcome-feature card-sketch feature-gov">
+          <div class="card-title-sketch">Governance & Compliance</div>
+          <p>Share policies, capture acknowledgements, schedule audits, and resolve issues with traceability.</p>
+        </article>
+        <article class="welcome-feature card-sketch feature-gam">
+          <div class="card-title-sketch">Gamification</div>
+          <p>Let employees earn XP, unlock badges, join challenges, and redeem rewards for sustainability actions.</p>
+        </article>
+        <article class="welcome-feature card-sketch feature-report">
+          <div class="card-title-sketch">Dashboards & Reports</div>
+          <p>Surface ESG scores, trend graphs, and exportable reports for management and stakeholders.</p>
+        </article>
+        <article class="welcome-feature card-sketch feature-admin">
+          <div class="card-title-sketch">Administration & Automation</div>
+          <p>Manage departments, categories, notifications, and system settings while reducing manual work.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROOT APP CONTAINER -->
+  <div class="app-container hidden" id="app-shell">
+    
+    <!-- SIDEBAR NAVIGATION PANEL -->
+    <aside class="sidebar-sketch">
+      <div class="sidebar-title">SIDEBAR NAVIGATION</div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li><a href="#" class="sidebar-link active" onclick="switchView('dashboard')"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+          
+          <li class="sidebar-group-title">Environmental</li>
+          <li><a href="#" class="sidebar-link" onclick="switchView('environmental', 'env-factors')">Emission Factors</a></li>
+          <li><a href="#" class="sidebar-link" onclick="switchView('environmental', 'env-products')">Product ESG Profiles</a></li>
+          <li><a href="#" class="sidebar-link" onclick="switchView('environmental', 'env-transactions')">Carbon Transactions</a></li>
+          <li><a href="#" class="sidebar-link" onclick="switchView('environmental', 'env-goals')">Environmental Goals</a></li>
+          
+          <li class="sidebar-group-title">Social</li>
+          <li><a href="#" class="sidebar-link" onclick="switchView('social', 'soc-activities')">CSR Activities</a></li>
+          <li><a href="#" class="sidebar-link" onclick="switchView('social', 'soc-participation')">Employee Participation</a></li>
+          <li><a href="#" class="sidebar-link" onclick="switchView('social', 'soc-diversity')">Diversity Dashboard</a></li>
+          
+          <li class="sidebar-group-title">Governance</li>
+          <li><a href="#" class="sidebar-link" onclick="switchView('governance', 'gov-policies')">Policies</a></li>
+          <li><a href="#" class="sidebar-link" onclick="switchView('governance', 'gov-acknowledgements')">Policy Acknowledgements</a></li>
+          <li><a href="#" class="sidebar-link" onclick="switchView('governance', 'gov-audits')">Audits</a></li>
+          <li><a href="#" class="sidebar-link" onclick="switchView('governance', 'gov-compliance')">Compliance Issues</a></li>
+          
+          <li class="sidebar-group-title">Gamification</li>
+          <li><a href="#" class="sidebar-link" onclick="switchView('gamification', 'gam-challenges')">Challenges</a></li>
+          <li><a href="#" class="sidebar-link" onclick="switchView('gamification', 'gam-badges')">Badges</a></li>
+          <li><a href="#" class="sidebar-link" onclick="switchView('gamification', 'gam-rewards')">Rewards</a></li>
+          <li><a href="#" class="sidebar-link" onclick="switchView('gamification', 'gam-leaderboard')">Leaderboard</a></li>
+          
+          <li class="sidebar-group-title">Reports</li>
+          <li><a href="#" class="sidebar-link" onclick="switchView('reports', 'rep-summary')">ESG Summary</a></li>
+          <li><a href="#" class="sidebar-link" onclick="switchView('reports', 'rep-custom')">Custom Report Builder</a></li>
+          
+          <li class="sidebar-group-title">Settings</li>
+          <li><a href="#" class="sidebar-link" onclick="switchView('settings', 'set-departments')">Departments</a></li>
+          <li><a href="#" class="sidebar-link" onclick="switchView('settings', 'set-categories')">Categories</a></li>
+          <li><a href="#" class="sidebar-link" onclick="switchView('settings', 'set-configuration')">ESG Configuration</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- MAIN VIEW AREA -->
+    <main class="main-content">
+      
+      <!-- TOP STATUS BAR & HEADER TITLE -->
+      <div class="top-status-header">
+        <h1 class="wireframe-title" id="wireframe-view-title">① Overview: Analytics Dashboard</h1>
+        
+        <div class="user-role-bar">
+          <!-- XP / Point Display for Employees -->
+          <div id="user-points-badge" class="user-points-badge-sketch hidden">
+            <span id="user-xp"><i class="fa-solid fa-bolt text-warning"></i> 0 XP</span>
+            <span id="user-pts"><i class="fa-solid fa-coins text-accent"></i> 0 Points</span>
+          </div>
+
+          <div class="auth-session-pill hidden" id="auth-session-pill">
+            <span id="auth-role-label">Guest</span>
+            <button type="button" class="btn-sketch btn-small" id="logout-btn">Log Out</button>
+          </div>
+
+          <!-- Notification Bell -->
+          <div class="notification-bell-sketch" id="notification-bell-btn">
+            <i class="fa-solid fa-bell"></i>
+            <span class="badge" id="notification-count">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- BROWSER WINDOW WRAPPER -->
+      <div class="window-frame">
+        <!-- macOS Style Titlebar -->
+        <div class="window-titlebar">
+          <div class="mac-dots">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+          </div>
+          <div class="window-title-text" id="window-title-text">EcoSphere: Dashboard</div>
+        </div>
+
+        <!-- MAIN TABS MENU INSIDE WINDOW -->
+        <div class="window-tabs-nav">
+          <button class="nav-tab-btn active" id="tab-nav-dashboard" onclick="switchView('dashboard')">Dashboard</button>
+          <button class="nav-tab-btn" id="tab-nav-environmental" onclick="switchView('environmental', 'env-factors')">Environmental</button>
+          <button class="nav-tab-btn" id="tab-nav-social" onclick="switchView('social', 'soc-activities')">Social</button>
+          <button class="nav-tab-btn" id="tab-nav-governance" onclick="switchView('governance', 'gov-audits')">Governance</button>
+          <button class="nav-tab-btn" id="tab-nav-gamification" onclick="switchView('gamification', 'gam-challenges')">Gamification</button>
+          <button class="nav-tab-btn" id="tab-nav-reports" onclick="switchView('reports', 'rep-summary')">Reports</button>
+          <button class="nav-tab-btn" id="tab-nav-settings" onclick="switchView('settings', 'set-departments')">Settings</button>
+        </div>
+
+        <!-- WINDOW CONTENT AREA -->
+        <div class="window-body">
+
+          <!-- 1. DASHBOARD VIEW -->
+          <div id="view-dashboard" class="view-panel active">
+            <!-- Metrics Row -->
+            <div class="metrics-grid-sketch">
+              <div class="metric-card-sketch env pointer" onclick="switchView('environmental', 'env-goals')">
+                <span class="metric-label">Environmental Score</span>
+                <span class="metric-value"><span id="score-env">82</span> <small>/ 100</small></span>
+              </div>
+              <div class="metric-card-sketch soc pointer" onclick="switchView('social', 'soc-activities')">
+                <span class="metric-label">Social Score</span>
+                <span class="metric-value"><span id="score-soc">74</span> <small>/ 100</small></span>
+              </div>
+              <div class="metric-card-sketch gov pointer" onclick="switchView('governance', 'gov-compliance')">
+                <span class="metric-label">Governance Score</span>
+                <span class="metric-value"><span id="score-gov">88</span> <small>/ 100</small></span>
+              </div>
+              <div class="metric-card-sketch overall">
+                <span class="metric-label">Overall ESG Score</span>
+                <span class="metric-value"><span id="score-overall">81</span> <small>/ 100</small></span>
+              </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="grid-2-sketch">
+              <div class="card-sketch">
+                <div class="card-title-sketch"><i class="fa-solid fa-chart-line text-emerald"></i> Emissions Trend (12 mo)</div>
+                <div class="chart-container-sketch">
+                  <canvas id="emissionsTrendChart" height="220"></canvas>
+                </div>
+              </div>
+              <div class="card-sketch">
+                <div class="card-title-sketch"><i class="fa-solid fa-chart-bar text-purple"></i> Department ESG Comparison</div>
+                <div class="chart-container-sketch">
+                  <canvas id="departmentScoresChart" height="220"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Activity & Quick Actions -->
+            <div class="grid-2-sketch mt-4">
+              <div class="card-sketch">
+                <div class="card-title-sketch"><i class="fa-solid fa-clock-rotate-left text-sky"></i> Recent Activity</div>
+                <div class="recent-activity-list" id="dashboard-activities">
+                  <!-- Filled dynamically -->
+                </div>
+              </div>
+              <div class="card-sketch">
+                <div class="card-title-sketch"><i class="fa-solid fa-wand-magic-sparkles text-amber"></i> Quick Actions</div>
+                <div class="quick-actions-grid-sketch">
+                  <button class="btn-sketch btn-emerald" onclick="openErpModal()"><i class="fa-solid fa-plus-circle"></i> Log Carbon Data</button>
+                  <button class="btn-sketch btn-amber" onclick="switchView('gamification', 'gam-challenges')"><i class="fa-solid fa-gamepad"></i> Start Challenge</button>
+                  <button class="btn-sketch btn-purple" onclick="switchView('reports', 'rep-summary')"><i class="fa-solid fa-file-invoice"></i> View Reports</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. ENVIRONMENTAL VIEW -->
+          <div id="view-environmental" class="view-panel">
+            <!-- Environmental Subtabs -->
+            <div class="subtabs-bar-sketch">
+              <button class="subtab-btn-sketch active" id="subtab-env-factors" onclick="switchSubTab('env-factors')">Emission Factors</button>
+              <button class="subtab-btn-sketch" id="subtab-env-products" onclick="switchSubTab('env-products')">Product ESG Profiles</button>
+              <button class="subtab-btn-sketch" id="subtab-env-transactions" onclick="switchSubTab('env-transactions')">Carbon Transactions</button>
+              <button class="subtab-btn-sketch" id="subtab-env-goals" onclick="switchSubTab('env-goals')">Environmental Goals</button>
+            </div>
+
+            <!-- Subtab Content Blocks -->
+            <div class="subtab-body-sketch">
+              
+              <!-- Tab: Emission Factors -->
+              <div id="tab-env-factors" class="tab-content-sketch active">
+                <div class="actions-row-sketch">
+                  <button class="btn-sketch btn-emerald" onclick="openEmissionFactorModal()"><i class="fa-solid fa-plus"></i> New Factor</button>
+                  <button class="btn-sketch btn-amber" id="edit-ef-btn" onclick="editSelectedRow('emission-factors')">Edit</button>
+                  <button class="btn-sketch btn-danger" id="delete-ef-btn" onclick="deleteSelectedRow('emission-factors')">Delete</button>
+                </div>
+                <div class="table-container-sketch">
+                  <table id="emission-factors-table" class="table-sketch">
+                    <thead>
+                      <tr>
+                        <th>Activity / Category</th>
+                        <th>Scope</th>
+                        <th>Value</th>
+                        <th>Unit</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody><!-- Dynamic --></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Tab: Product Profiles -->
+              <div id="tab-env-products" class="tab-content-sketch">
+                <div class="actions-row-sketch">
+                  <button class="btn-sketch btn-emerald" onclick="openProductModal()"><i class="fa-solid fa-plus"></i> New Product</button>
+                  <button class="btn-sketch btn-amber" id="edit-prod-btn" onclick="editSelectedRow('products')">Edit</button>
+                  <button class="btn-sketch btn-danger" id="delete-prod-btn" onclick="deleteSelectedRow('products')">Delete</button>
+                </div>
+                <div class="table-container-sketch">
+                  <table id="products-table" class="table-sketch">
+                    <thead>
+                      <tr>
+                        <th>Product Name</th>
+                        <th>Product Code</th>
+                        <th>Carbon Footprint (kg CO2)</th>
+                        <th>Material Recyclability (%)</th>
+                        <th>Ethical Sourcing</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody><!-- Dynamic --></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Tab: Carbon Transactions -->
+              <div id="tab-env-transactions" class="tab-content-sketch">
+                <div class="actions-row-sketch">
+                  <button class="btn-sketch btn-emerald" onclick="openErpModal()"><i class="fa-solid fa-plus"></i> Sim ERP Log</button>
+                  <button class="btn-sketch btn-purple" onclick="openCarbonTxModal()"><i class="fa-solid fa-plus"></i> Manual Log</button>
+                  <button class="btn-sketch btn-danger" id="delete-tx-btn" onclick="deleteSelectedRow('carbon-transactions')">Delete</button>
+                </div>
+                <div class="table-container-sketch">
+                  <table id="carbon-transactions-table" class="table-sketch">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Source Type</th>
+                        <th>Input Value</th>
+                        <th>Calculated Emission</th>
+                        <th>Department</th>
+                        <th>Date</th>
+                        <th>Reference ID</th>
+                        <th>Type</th>
+                      </tr>
+                    </thead>
+                    <tbody><!-- Dynamic --></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Tab: Environmental Goals -->
+              <div id="tab-env-goals" class="tab-content-sketch">
+                <div class="actions-row-sketch">
+                  <button class="btn-sketch btn-emerald" onclick="openGoalModal()"><i class="fa-solid fa-plus"></i> + New Goal</button>
+                  <button class="btn-sketch btn-amber" id="edit-goal-btn" onclick="editSelectedRow('goals')">Edit</button>
+                  <button class="btn-sketch btn-danger" id="delete-goal-btn" onclick="deleteSelectedRow('goals')">Delete</button>
+                  <button class="btn-sketch btn-grey" onclick="exportGoalData('csv')"><i class="fa-solid fa-download"></i> Export CSV</button>
+                  <button class="btn-sketch btn-grey" onclick="exportGoalData('json')"><i class="fa-solid fa-download"></i> Export JSON</button>
+                  
+                  <div class="search-box-sketch">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="goal-search-input" onkeyup="searchGoalsTable()" placeholder="Search goals...">
+                  </div>
+                </div>
+                <div class="table-container-sketch">
+                  <table id="goals-table" class="table-sketch">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Target CO2</th>
+                        <th>Current CO2</th>
+                        <th>Progress</th>
+                        <th>Deadline</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody><!-- Dynamic --></tbody>
+                  </table>
+                </div>
+                <div class="table-footer-note-sketch">
+                  Row actions: View, Edit, Delete • Carbon Transactions auto-generated from Purchase/Manufacturing/Fleet/Expenses
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- 3. SOCIAL VIEW -->
+          <div id="view-social" class="view-panel">
+            <div class="subtabs-bar-sketch">
+              <button class="subtab-btn-sketch active" id="subtab-soc-activities" onclick="switchSubTab('soc-activities')">CSR Activities</button>
+              <button class="subtab-btn-sketch" id="subtab-soc-participation" onclick="switchSubTab('soc-participation')">Employee Participation</button>
+              <button class="subtab-btn-sketch" id="subtab-soc-diversity" onclick="switchSubTab('soc-diversity')">Diversity Dashboard</button>
+            </div>
+
+            <div class="subtab-body-sketch">
+              <!-- Tab: CSR Activities -->
+              <div id="tab-soc-activities" class="tab-content-sketch active">
+                <div class="actions-row-sketch">
+                  <button class="btn-sketch btn-sky" onclick="openCsrActivityModal()"><i class="fa-solid fa-plus"></i> + New Activity</button>
+                </div>
+                
+                <!-- Cards catalog -->
+                <div class="csr-catalog-sketch" id="csr-activities-grid">
+                  <!-- Dynamic cards outline -->
+                </div>
+
+                <!-- Approval queue list -->
+                <div class="card-title-sketch mt-4" style="font-size:16px;">Employee Participation: approval queue</div>
+                <div class="table-container-sketch">
+                  <table id="csr-participation-table" class="table-sketch">
+                    <thead>
+                      <tr>
+                        <th>Employee</th>
+                        <th>Activity/Challenge</th>
+                        <th>Proof</th>
+                        <th>Points</th>
+                        <th>Approval</th>
+                      </tr>
+                    </thead>
+                    <tbody><!-- Dynamic --></tbody>
+                  </table>
+                </div>
+                
+                <div class="actions-row-sketch mt-3">
+                  <button class="btn-sketch btn-sky" id="approve-csr-btn" onclick="handleCsrQueueApproval(true)">Approve</button>
+                  <button class="btn-sketch btn-danger" id="reject-csr-btn" onclick="handleCsrQueueApproval(false)">Reject</button>
+                </div>
+              </div>
+
+              <!-- Tab: Employee Participation -->
+              <div id="tab-soc-participation" class="tab-content-sketch">
+                <div class="table-container-sketch">
+                  <table id="csr-participation-log-table" class="table-sketch">
+                    <thead>
+                      <tr>
+                        <th>Employee</th>
+                        <th>CSR Activity</th>
+                        <th>Submission Proof</th>
+                        <th>Approval Status</th>
+                        <th>Date Completed</th>
+                      </tr>
+                    </thead>
+                    <tbody><!-- Dynamic --></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Tab: Diversity Dashboard -->
+              <div id="tab-soc-diversity" class="tab-content-sketch">
+                <div class="diversity-dashboard-sketch">
+                  <div class="card-sketch text-center" style="min-width: 280px;">
+                    <h4>Gender Diversity Ratio</h4>
+                    <div id="div-gender-breakdown" style="font-size: 15px; margin-top: 10px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; text-align: left; padding: 5px;">
+                      <!-- Dynamic -->
+                    </div>
+                  </div>
+                  <div class="card-sketch text-center">
+                    <h4>CSR Participation Rate</h4>
+                    <div id="div-csr-participation-rate" style="font-size: 24px; font-weight: bold; margin-top: 10px;">--</div>
+                  </div>
+                  <div class="card-sketch text-center">
+                    <h4>Training Program Completions</h4>
+                    <div id="div-training-completion" style="font-size: 24px; font-weight: bold; margin-top: 10px;">--</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. GOVERNANCE VIEW -->
+          <div id="view-governance" class="view-panel">
+            <div class="subtabs-bar-sketch">
+              <button class="subtab-btn-sketch" id="subtab-gov-policies" onclick="switchSubTab('gov-policies')">Policies</button>
+              <button class="subtab-btn-sketch" id="subtab-gov-acknowledgements" onclick="switchSubTab('gov-acknowledgements')">Policy Acknowledgements</button>
+              <button class="subtab-btn-sketch active" id="subtab-gov-audits" onclick="switchSubTab('gov-audits')">Audits</button>
+              <button class="subtab-btn-sketch" id="subtab-gov-compliance" onclick="switchSubTab('gov-compliance')">Compliance Issues</button>
+            </div>
+
+            <div class="subtab-body-sketch">
+              
+              <!-- Tab: Policies -->
+              <div id="tab-gov-policies" class="tab-content-sketch">
+                <div class="actions-row-sketch">
+                  <button class="btn-sketch btn-purple" onclick="openPolicyModal()"><i class="fa-solid fa-plus"></i> New Policy</button>
+                </div>
+                <div class="policies-list-sketch" id="policies-container">
+                  <!-- Dynamic cards -->
+                </div>
+              </div>
+
+              <!-- Tab: Policy Acknowledgements -->
+              <div id="tab-gov-acknowledgements" class="tab-content-sketch">
+                <div class="table-container-sketch">
+                  <table id="policy-acknowledgements-table" class="table-sketch">
+                    <thead>
+                      <tr>
+                        <th>Employee</th>
+                        <th>Acknowledged Policy</th>
+                        <th>Acknowledged Date</th>
+                      </tr>
+                    </thead>
+                    <tbody><!-- Dynamic --></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Tab: Audits -->
+              <div id="tab-gov-audits" class="tab-content-sketch active">
+                <div class="actions-row-sketch">
+                  <button class="btn-sketch btn-purple" onclick="openAuditModal()"><i class="fa-solid fa-plus"></i> + New Audit</button>
+                  <button class="btn-sketch btn-grey" onclick="exportAuditsData('csv')"><i class="fa-solid fa-download"></i> Export CSV</button>
+                  <button class="btn-sketch btn-grey" onclick="exportAuditsData('json')"><i class="fa-solid fa-download"></i> Export JSON</button>
+                </div>
+                <div class="table-container-sketch">
+                  <table id="audits-table" class="table-sketch">
+                    <thead>
+                      <tr>
+                        <th>Title</th>
+                        <th>Department</th>
+                        <th>Auditor</th>
+                        <th>Date</th>
+                        <th>Findings</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody><!-- Dynamic --></tbody>
+                  </table>
+                </div>
+
+                <!-- Compliance Issues List underneath audits -->
+                <div class="card-title-sketch mt-4" style="font-size:16px;">Compliance Issues raised from Audits — severity-tagged, resolution tracked</div>
+                <div class="table-container-sketch">
+                  <table id="compliance-issues-table" class="table-sketch">
+                    <thead>
+                      <tr>
+                        <th>Issue</th>
+                        <th>Severity</th>
+                        <th>Department</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody><!-- Dynamic --></tbody>
+                  </table>
+                </div>
+                <div class="actions-row-sketch mt-3">
+                  <button class="btn-sketch btn-danger" onclick="openComplianceModal()"><i class="fa-solid fa-triangle-exclamation"></i> Raise Violation</button>
+                  <button class="btn-sketch btn-emerald" id="resolve-ci-btn" onclick="resolveSelectedComplianceIssue()">Resolve Selected</button>
+                </div>
+              </div>
+
+              <!-- Tab: Compliance Issues Detail -->
+              <div id="tab-gov-compliance" class="tab-content-sketch">
+                <div class="table-container-sketch">
+                  <table id="compliance-issues-details-table" class="table-sketch">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Audit Context</th>
+                        <th>Severity</th>
+                        <th>Description</th>
+                        <th>Owner</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody><!-- Dynamic --></tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- 5. GAMIFICATION VIEW -->
+          <div id="view-gamification" class="view-panel">
+            <div class="subtabs-bar-sketch">
+              <button class="subtab-btn-sketch active" id="subtab-gam-challenges" onclick="switchSubTab('gam-challenges')">Challenges</button>
+              <button class="subtab-btn-sketch" id="subtab-gam-participation" onclick="switchSubTab('gam-participation')">Challenge Participation</button>
+              <button class="subtab-btn-sketch" id="subtab-gam-badges" onclick="switchSubTab('gam-badges')">Badges</button>
+              <button class="subtab-btn-sketch" id="subtab-gam-rewards" onclick="switchSubTab('gam-rewards')">Rewards</button>
+              <button class="subtab-btn-sketch" id="subtab-gam-leaderboard" onclick="switchSubTab('gam-leaderboard')">Leaderboard</button>
+            </div>
+
+            <div class="subtab-body-sketch">
+              <!-- Tab: Challenges -->
+              <div id="tab-gam-challenges" class="tab-content-sketch active">
+                <div class="actions-row-sketch">
+                  <button class="btn-sketch btn-amber" onclick="openChallengeModal()"><i class="fa-solid fa-plus"></i> + New Challenge</button>
+                </div>
+                
+                <!-- Lifecycle Tabs (Filters) -->
+                <div class="challenge-filters-sketch">
+                  <button class="filter-tab active" data-status="All" onclick="filterChallenges('All')">All</button>
+                  <button class="filter-tab" data-status="Draft" onclick="filterChallenges('Draft')">Draft</button>
+                  <button class="filter-tab" data-status="Active" onclick="filterChallenges('Active')">Active</button>
+                  <button class="filter-tab" data-status="Under Review" onclick="filterChallenges('Under Review')">Under Review</button>
+                  <button class="filter-tab" data-status="Completed" onclick="filterChallenges('Completed')">Completed</button>
+                  <button class="filter-tab" data-status="Archived" onclick="filterChallenges('Archived')">Archived</button>
+                </div>
+
+                <!-- Challenges Grid -->
+                <div class="challenges-grid-sketch" id="challenges-container">
+                  <!-- Dynamic cards matching mockup outlines -->
+                </div>
+
+                <!-- Badge Gallery & Leaderboard layout (Side by Side) -->
+                <div class="grid-2-sketch mt-4">
+                  <!-- Badge Gallery -->
+                  <div class="card-sketch orange-outline">
+                    <div class="card-title-sketch text-amber"><i class="fa-solid fa-award"></i> Badge Gallery</div>
+                    <div class="badge-gallery-subgrid-sketch" id="badge-gallery-container">
+                      <!-- 2x2 badge items -->
+                    </div>
+                  </div>
+
+                  <!-- Leaderboard Widget -->
+                  <div class="card-sketch orange-outline">
+                    <div class="card-title-sketch text-amber"><i class="fa-solid fa-ranking-star"></i> Leaderboard</div>
+                    <div class="leaderboard-widget-table-container">
+                      <table id="leaderboard-table-widget" class="table-sketch no-border">
+                        <thead>
+                          <tr>
+                            <th>Rank</th>
+                            <th>Employee/Dept</th>
+                            <th>XP</th>
+                          </tr>
+                        </thead>
+                        <tbody><!-- Dynamic --></tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tab: Challenge Participation Queue -->
+              <div id="tab-gam-participation" class="tab-content-sketch">
+                <div class="table-container-sketch">
+                  <table id="challenge-participation-queue-table" class="table-sketch">
+                    <thead>
+                      <tr>
+                        <th>Employee</th>
+                        <th>Challenge Title</th>
+                        <th>Progress (%)</th>
+                        <th>Proof Submitted</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody><!-- Dynamic --></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Tab: Badges -->
+              <div id="tab-gam-badges" class="tab-content-sketch">
+                <div class="actions-row-sketch">
+                  <button class="btn-sketch btn-amber" onclick="openBadgeModal()"><i class="fa-solid fa-plus"></i> Create Badge</button>
+                </div>
+                <div class="badges-grid-sketch" id="badges-container">
+                  <!-- Dynamic badge list cards -->
+                </div>
+              </div>
+
+              <!-- Tab: Rewards -->
+              <div id="tab-gam-rewards" class="tab-content-sketch">
+                <div class="actions-row-sketch">
+                  <button class="btn-sketch btn-amber" onclick="openRewardModal()"><i class="fa-solid fa-plus"></i> Add Reward</button>
+                </div>
+                <div class="rewards-grid-sketch" id="rewards-container">
+                  <!-- Dynamic reward list cards -->
+                </div>
+              </div>
+
+              <!-- Tab: Leaderboard Full view -->
+              <div id="tab-gam-leaderboard" class="tab-content-sketch">
+                <div class="table-container-sketch">
+                  <table id="leaderboard-table" class="table-sketch">
+                    <thead>
+                      <tr>
+                        <th>Rank</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>XP Points</th>
+                        <th>Badges Count</th>
+                      </tr>
+                    </thead>
+                    <tbody><!-- Dynamic --></tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- 6. REPORTS VIEW -->
+          <div id="view-reports" class="view-panel">
+            <div class="subtabs-bar-sketch">
+              <button class="subtab-btn-sketch" id="subtab-rep-environmental" onclick="switchSubTab('rep-environmental')">Environmental</button>
+              <button class="subtab-btn-sketch" id="subtab-rep-social" onclick="switchSubTab('rep-social')">Social</button>
+              <button class="subtab-btn-sketch" id="subtab-rep-governance" onclick="switchSubTab('rep-governance')">Governance</button>
+              <button class="subtab-btn-sketch active" id="subtab-rep-summary" onclick="switchSubTab('rep-summary')">ESG Summary Report</button>
+              <button class="subtab-btn-sketch" id="subtab-rep-custom" onclick="switchSubTab('rep-custom')">Custom Report Builder</button>
+            </div>
+
+            <div class="subtab-body-sketch">
+              
+              <!-- Report Cards Grid (E/S/G/Summary) -->
+              <div id="tab-rep-summary" class="tab-content-sketch active">
+                <div class="reports-generation-row-sketch">
+                  
+                  <div class="report-generator-card-sketch">
+                    <span class="rep-icon"><i class="fa-solid fa-leaf text-emerald"></i></span>
+                    <h4>Environmental Report</h4>
+                    <p>Emissions, goals, vendor & product breakdown</p>
+                    <div style="display: flex; gap: 6px; justify-content: center; margin-top: auto;">
+                      <button class="btn-sketch btn-grey btn-small" onclick="exportReport('environmental', 'csv')">CSV</button>
+                      <button class="btn-sketch btn-grey btn-small" onclick="exportReport('environmental', 'json')">JSON</button>
+                    </div>
+                  </div>
+
+                  <div class="report-generator-card-sketch">
+                    <span class="rep-icon"><i class="fa-solid fa-handshake-angle text-sky"></i></span>
+                    <h4>Social Report</h4>
+                    <p>Diversity, CSR participation, training completion</p>
+                    <div style="display: flex; gap: 6px; justify-content: center; margin-top: auto;">
+                      <button class="btn-sketch btn-grey btn-small" onclick="exportReport('social', 'csv')">CSV</button>
+                      <button class="btn-sketch btn-grey btn-small" onclick="exportReport('social', 'json')">JSON</button>
+                    </div>
+                  </div>
+
+                  <div class="report-generator-card-sketch">
+                    <span class="rep-icon"><i class="fa-solid fa-scale-balanced text-purple"></i></span>
+                    <h4>Governance Report</h4>
+                    <p>Policies, audits, compliance & risk summary</p>
+                    <div style="display: flex; gap: 6px; justify-content: center; margin-top: auto;">
+                      <button class="btn-sketch btn-grey btn-small" onclick="exportReport('governance', 'csv')">CSV</button>
+                      <button class="btn-sketch btn-grey btn-small" onclick="exportReport('governance', 'json')">JSON</button>
+                    </div>
+                  </div>
+
+                  <div class="report-generator-card-sketch">
+                    <span class="rep-icon"><i class="fa-solid fa-earth-europe text-muted"></i></span>
+                    <h4>ESG Summary</h4>
+                    <p>Executive overview: all 4 scores + dept comparison</p>
+                    <div style="display: flex; gap: 6px; justify-content: center; margin-top: auto;">
+                      <button class="btn-sketch btn-grey btn-small" onclick="exportReport('summary', 'csv')">CSV</button>
+                      <button class="btn-sketch btn-grey btn-small" onclick="exportReport('summary', 'json')">JSON</button>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Print details container -->
+                <div id="summary-report-page" class="card-sketch mt-4 hidden">
+                  <h2>EcoSphere Summary ESG Report</h2>
+                  <hr>
+                  <p>Total Carbon footprint: <b id="rep-env-total">-- kg CO2</b></p>
+                  <p>Social CSR participations: <b id="rep-soc-total-participations">-- entries</b></p>
+                  <p>Governance Policies: <b id="rep-gov-policies">--</b> | Issues: <b id="rep-gov-compliance">--</b></p>
+                </div>
+              </div>
+
+              <!-- Custom Report Builder -->
+              <div id="tab-rep-custom" class="tab-content-sketch">
+                <!-- Custom Builder Panel Header -->
+                <div class="card-title-sketch" style="font-size:16px;">Custom Report Builder: Filters</div>
+                
+                <form id="custom-report-filter-form" onsubmit="generateCustomReport(event)">
+                  <div class="filter-controls-pills-row-sketch">
+                    
+                    <div class="form-group-sketch">
+                      <label>Date Range</label>
+                      <input type="date" id="filter-start-date" class="styled-input-sketch">
+                    </div>
+
+                    <div class="form-group-sketch">
+                      <label>Department</label>
+                      <select id="filter-department" class="styled-select-sketch">
+                        <option value="">All Departments</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group-sketch">
+                      <label>Module</label>
+                      <select id="filter-module" class="styled-select-sketch">
+                        <option value="">All Modules</option>
+                        <option value="Environmental">Environmental</option>
+                        <option value="Social">Social</option>
+                        <option value="Governance">Governance</option>
+                        <option value="Gamification">Gamification</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group-sketch">
+                      <label>Employee</label>
+                      <input type="text" id="filter-employee" class="styled-input-sketch" placeholder="Employee Name">
+                    </div>
+
+                    <div class="form-group-sketch">
+                      <label>Challenge</label>
+                      <input type="text" id="filter-challenge" class="styled-input-sketch" placeholder="Challenge context">
+                    </div>
+
+                    <div class="form-group-sketch">
+                      <label>ESG Category</label>
+                      <select id="filter-esg-category" class="styled-select-sketch">
+                        <option value="">All Categories</option>
+                        <option value="E">Environmental</option>
+                        <option value="S">Social</option>
+                        <option value="G">Governance</option>
+                      </select>
+                    </div>
+
+                  </div>
+
+                  <div class="actions-row-sketch mt-3">
+                    <button type="submit" class="btn-sketch btn-emerald">Run Report</button>
+                    <button type="button" class="btn-sketch btn-grey" onclick="exportCustomReport('PDF')">Export: PDF</button>
+                    <button type="button" class="btn-sketch btn-grey" onclick="exportCustomReport('Excel')">Export: Excel</button>
+                    <button type="button" class="btn-sketch btn-grey" onclick="exportCustomReport('CSV')">Export: CSV</button>
+                    <button type="button" class="btn-sketch btn-grey" onclick="exportCustomReport('JSON')">Export: JSON</button>
+                  </div>
+                </form>
+
+                <!-- Results table container -->
+                <div class="table-container-sketch mt-4">
+                  <table id="custom-report-results-table" class="table-sketch">
+                    <thead>
+                      <tr>
+                        <th>Module</th>
+                        <th>Transaction Name</th>
+                        <th>Details / Metrics</th>
+                        <th>Date</th>
+                        <th>Department</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td colspan="5" class="text-center text-muted">No criteria entered. Select filters and click Run Report.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- 7. SETTINGS VIEW -->
+          <div id="view-reports" class="view-panel"> <!-- Handled dynamically --> </div>
+          
+          <div id="view-settings" class="view-panel">
+            <div class="subtabs-bar-sketch">
+              <button class="subtab-btn-sketch active" id="subtab-set-departments" onclick="switchSubTab('set-departments')">Departments</button>
+              <button class="subtab-btn-sketch" id="subtab-set-categories" onclick="switchSubTab('set-categories')">Categories</button>
+              <button class="subtab-btn-sketch" id="subtab-set-configuration" onclick="switchSubTab('set-configuration')">ESG Configuration</button>
+              <button class="subtab-btn-sketch" id="subtab-set-notifications" onclick="switchSubTab('set-notifications')">Notification Settings</button>
+            </div>
+
+            <div class="subtab-body-sketch">
+              
+              <!-- Tab: Departments -->
+              <div id="tab-set-departments" class="tab-content-sketch active">
+                <div class="actions-row-sketch">
+                  <button class="btn-sketch btn-grey" onclick="openDepartmentModal()"><i class="fa-solid fa-plus"></i> + New Department</button>
+                  <button class="btn-sketch btn-amber" id="edit-dept-btn" onclick="editSelectedRow('departments')">Edit</button>
+                  <button class="btn-sketch btn-danger" id="delete-dept-btn" onclick="deleteSelectedRow('departments')">Delete</button>
+                </div>
+                <div class="table-container-sketch">
+                  <table id="departments-table" class="table-sketch">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Code</th>
+                        <th>Head</th>
+                        <th>Parent Dept</th>
+                        <th>Employees</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody><!-- Dynamic --></tbody>
+                  </table>
+                </div>
+
+                <!-- Toggles panel directly underneath departments table -->
+                <div class="card-title-sketch mt-4" style="font-size:16px;">ESG Configuration & Notifications</div>
+                <form id="global-config-form" onsubmit="saveGlobalConfig(event)" style="margin-top:10px;">
+                  <div class="toggle-group-sketch">
+                    
+                    <div class="toggle-row-sketch">
+                      <label class="switch-sketch">
+                        <input type="checkbox" id="toggle-auto-emissions" onchange="submitGlobalConfigToggles()">
+                        <span class="slider-sketch"></span>
+                      </label>
+                      <span>Enable auto emission calculation</span>
+                    </div>
+
+                    <div class="toggle-row-sketch">
+                      <label class="switch-sketch">
+                        <input type="checkbox" id="toggle-evidence-req" onchange="submitGlobalConfigToggles()">
+                        <span class="slider-sketch"></span>
+                      </label>
+                      <span>Require evidence for all CSR activities</span>
+                    </div>
+
+                    <div class="toggle-row-sketch">
+                      <label class="switch-sketch">
+                        <input type="checkbox" id="toggle-badge-auto" onchange="submitGlobalConfigToggles()">
+                        <span class="slider-sketch"></span>
+                      </label>
+                      <span>Auto-award badges on challenge completion</span>
+                    </div>
+
+                    <div class="toggle-row-sketch">
+                      <label class="switch-sketch">
+                        <input type="checkbox" id="toggle-notif-compliance" onchange="submitGlobalConfigToggles()">
+                        <span class="slider-sketch"></span>
+                      </label>
+                      <span>Email alerts for new compliance issues</span>
+                    </div>
+
+                  </div>
+                </form>
+              </div>
+
+              <!-- Tab: Categories -->
+              <div id="tab-set-categories" class="tab-content-sketch">
+                <div class="actions-row-sketch">
+                  <button class="btn-sketch btn-grey" onclick="openCategoryModal()"><i class="fa-solid fa-plus"></i> Add Category</button>
+                </div>
+                <div class="table-container-sketch">
+                  <table id="categories-table" class="table-sketch">
+                    <thead>
+                      <tr>
+                        <th>Category Name</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody><!-- Dynamic --></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Tab: Weights Configuration -->
+              <div id="tab-set-configuration" class="tab-content-sketch">
+                <div class="card-sketch">
+                  <h4>Configure ESG Score Weights (%)</h4>
+                  <div class="weights-input-grid-sketch" style="display:flex; gap:16px; margin-top:16px;">
+                    <div class="form-group-sketch">
+                      <label>Environmental Weight</label>
+                      <input type="number" id="weight-env" class="styled-input-sketch" min="0" max="100">
+                    </div>
+                    <div class="form-group-sketch">
+                      <label>Social Weight</label>
+                      <input type="number" id="weight-soc" class="styled-input-sketch" min="0" max="100">
+                    </div>
+                    <div class="form-group-sketch">
+                      <label>Governance Weight</label>
+                      <input type="number" id="weight-gov" class="styled-input-sketch" min="0" max="100">
+                    </div>
+                  </div>
+                  <button type="button" class="btn-sketch btn-emerald mt-3" onclick="saveWeightsConfig()">Save Weights</button>
+                </div>
+              </div>
+
+              <!-- Tab: Notification Settings -->
+              <div id="tab-set-notifications" class="tab-content-sketch">
+                <div class="card-sketch">
+                  <h4>Notification Settings</h4>
+                  <p class="table-footer-note-sketch">Control which events generate in-app notifications and email alerts.</p>
+                  <div class="toggle-group-sketch">
+                    <div class="toggle-row-sketch">
+                      <label class="switch-sketch">
+                        <input type="checkbox" id="toggle-notif-compliance-issues" onchange="submitGlobalConfigToggles()">
+                        <span class="slider-sketch"></span>
+                      </label>
+                      <span>New compliance issues</span>
+                    </div>
+                    <div class="toggle-row-sketch">
+                      <label class="switch-sketch">
+                        <input type="checkbox" id="toggle-notif-approvals" onchange="submitGlobalConfigToggles()">
+                        <span class="slider-sketch"></span>
+                      </label>
+                      <span>CSR and challenge approval decisions</span>
+                    </div>
+                    <div class="toggle-row-sketch">
+                      <label class="switch-sketch">
+                        <input type="checkbox" id="toggle-notif-reminders" onchange="submitGlobalConfigToggles()">
+                        <span class="slider-sketch"></span>
+                      </label>
+                      <span>Policy acknowledgement reminders and overdue alerts</span>
+                    </div>
+                    <div class="toggle-row-sketch">
+                      <label class="switch-sketch">
+                        <input type="checkbox" id="toggle-notif-badges" onchange="submitGlobalConfigToggles()">
+                        <span class="slider-sketch"></span>
+                      </label>
+                      <span>Badge unlocks and reward redemption notices</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+
+    <!-- NOTIFICATION SLIDEOUT PANEL -->
+    <div class="notif-slideout-sketch" id="notif-slideout">
+      <div class="notif-slideout-header">
+        <h3>Notifications</h3>
+        <button class="btn-sketch btn-small" onclick="markAllNotificationsRead()">Mark all read</button>
+        <button class="btn-icon" id="notif-close-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="notif-slideout-body" id="notif-list-container">
+        <!-- List dynamic -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TOAST POPUP NOTIFICATION CONTAINER -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- DIALOG MODALS ENGINE -->
+  <div class="modal-backdrop-sketch" id="modal-backdrop">
+    <div class="modal-dialog-sketch">
+      <div class="modal-header-sketch">
+        <h3 id="modal-title">Log Data</h3>
+        <button class="btn-icon" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body-sketch" id="modal-body">
+        <!-- Forms loaded dynamically by JS -->
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
+</body>
+</html>

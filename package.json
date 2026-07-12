@@ -1,0 +1,15 @@
+{
+  "name": "ecosphere-esg-platform",
+  "version": "1.0.0",
+  "description": "EcoSphere Environmental, Social, and Governance (ESG) Management Platform",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "author": "Antigravity",
+  "license": "ISC"
+}

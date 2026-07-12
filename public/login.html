@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoSphere | Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Architects+Daughter&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="auth-page">
+  <div class="auth-page-shell">
+    <section class="card-sketch auth-card-sketch auth-page-card">
+      <a href="index.html" class="auth-back-link">Back to Home</a>
+      <div class="welcome-kicker">EcoSphere</div>
+      <div class="card-title-sketch"><i class="fa-solid fa-shield-halved text-emerald"></i> Secure Login</div>
+      <div class="auth-switcher-row">
+        <button type="button" class="auth-switcher-btn active" data-auth-tab="login" onclick="switchAuthTab('login')">Log In</button>
+        <button type="button" class="auth-switcher-btn" data-auth-tab="signup" onclick="switchAuthTab('signup')">Sign Up</button>
+        <button type="button" class="auth-switcher-btn" data-auth-tab="forgot" onclick="switchAuthTab('forgot')">Forgot Password</button>
+        <button type="button" class="auth-switcher-btn" data-auth-tab="change" onclick="switchAuthTab('change')">Change Password</button>
+      </div>
+
+      <form id="auth-login-form" class="auth-form-panel active">
+        <div class="form-group-sketch">
+          <label>Email or Employee ID</label>
+          <input type="text" id="login-identifier" class="styled-input-sketch" placeholder="name@company.com or EMP001" required>
+        </div>
+        <div class="form-group-sketch">
+          <label>Password</label>
+          <input type="password" id="login-password" class="styled-input-sketch" placeholder="Your password" required>
+        </div>
+        <div class="auth-inline-row">
+          <label class="auth-check-row"><input type="checkbox" id="login-remember-me"> Remember me</label>
+          <span class="auth-hint">RBAC applies after login</span>
+        </div>
+        <button type="submit" class="btn-sketch btn-emerald auth-submit-btn">Log In</button>
+      </form>
+
+      <form id="auth-signup-form" class="auth-form-panel">
+        <div class="auth-two-col">
+          <div class="form-group-sketch">
+            <label>Full Name</label>
+            <input type="text" id="signup-name" class="styled-input-sketch" placeholder="Your name" required>
+          </div>
+          <div class="form-group-sketch">
+            <label>Employee ID</label>
+            <input type="text" id="signup-employee-id" class="styled-input-sketch" placeholder="EMP001" required>
+          </div>
+        </div>
+        <div class="form-group-sketch">
+          <label>Email</label>
+          <input type="email" id="signup-email" class="styled-input-sketch" placeholder="name@company.com" required>
+        </div>
+        <div class="auth-two-col">
+          <div class="form-group-sketch">
+            <label>Role</label>
+            <select id="signup-role" class="styled-select-sketch" required>
+              <option value="Employee">Employee</option>
+              <option value="Department Head">Department Head</option>
+              <option value="HR Manager">HR Manager</option>
+              <option value="ESG Manager">ESG Manager</option>
+              <option value="Compliance Officer">Compliance Officer</option>
+              <option value="Administrator">Administrator</option>
+            </select>
+          </div>
+          <div class="form-group-sketch">
+            <label>Password</label>
+            <input type="password" id="signup-password" class="styled-input-sketch" placeholder="Create a strong password" required>
+          </div>
+        </div>
+        <div class="auth-password-rules">Minimum 8 characters, with uppercase, lowercase, number, and special character.</div>
+        <button type="submit" class="btn-sketch btn-sky auth-submit-btn">Create Account</button>
+      </form>
+
+      <form id="auth-forgot-form" class="auth-form-panel">
+        <div class="form-group-sketch">
+          <label>Email</label>
+          <input type="email" id="forgot-email" class="styled-input-sketch" placeholder="name@company.com" required>
+        </div>
+        <button type="submit" class="btn-sketch btn-purple auth-submit-btn">Send Reset Link</button>
+      </form>
+
+      <form id="auth-change-form" class="auth-form-panel">
+        <div class="form-group-sketch">
+          <label>New Password</label>
+          <input type="password" id="change-password" class="styled-input-sketch" placeholder="New password" required>
+        </div>
+        <div class="form-group-sketch">
+          <label>Confirm Password</label>
+          <input type="password" id="change-password-confirm" class="styled-input-sketch" placeholder="Confirm password" required>
+        </div>
+        <button type="submit" class="btn-sketch btn-amber auth-submit-btn">Update Password</button>
+      </form>
+
+      <div class="auth-message-box" id="auth-message"></div>
+      <div class="welcome-summary-list auth-security-note">
+        <div><strong>Access control:</strong> Each role sees only authorized modules.</div>
+        <div><strong>Security:</strong> Sessions, audit logging, and role checks are enforced after sign-in.</div>
+        <div><strong>RBAC:</strong> Role-Based Access Control restricts read/write by user role.</div>
+      </div>
+    </section>
+  </div>
+
+  <script src="login.js"></script>
+</body>
+</html>
