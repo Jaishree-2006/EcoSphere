@@ -58,6 +58,7 @@ async function authenticateRequest(req, res, next) {
       };
       return next();
     }
+    console.log(`[AUTH] No token for path: ${req.path}`);
     return res.status(401).json({ error: 'Authentication required.' });
   }
 
@@ -80,19 +81,23 @@ async function authenticateRequest(req, res, next) {
         };
         return next();
       }
+      console.log(`[AUTH] Token verification failed for path: ${req.path}`);
       return res.status(401).json({ error: 'Invalid or expired session.' });
     }
 
     const user = await response.json();
+    const role = normalizeRole(user.user_metadata?.role || user.app_metadata?.role || 'Employee');
+    console.log(`[AUTH] User authenticated for path: ${req.path}, email: ${user.email}, role: ${role}`);
     req.authUser = {
       id: user.id,
       email: user.email,
-      role: normalizeRole(user.user_metadata?.role || user.app_metadata?.role || 'Employee'),
+      role: role,
       metadata: user.user_metadata || {},
       appMetadata: user.app_metadata || {}
     };
     next();
   } catch (error) {
+    console.error('[AUTH] Verification error:', error.message);
     res.status(401).json({ error: 'Authentication verification failed.' });
   }
 }
@@ -769,39 +774,53 @@ app.get('/api/challenge-participation', (req, res) => {
 });
 
 app.post('/api/challenge-participation', (req, res) => {
-  const db = dbHelper.readDb();
-  const challenge = db.challenges.find((c) => c.id === req.body.challengeId);
-  if (!challenge) return res.status(404).json({ error: 'Challenge not found' });
+  try {
+    const db = dbHelper.readDb();
+    const challenge = db.challenges.find((c) => c.id === req.body.challengeId);
+    if (!challenge) {
+      console.log(`[CHALLENGE-JOIN] Challenge not found: ${req.body.challengeId}`);
+      return res.status(404).json({ error: 'Challenge not found' });
+    }
 
-  if (req.authUser?.role === 'Administrator') {
-    return res.status(403).json({ error: 'Administrators cannot join challenges as participants.' });
+    console.log(`[CHALLENGE-JOIN] Auth role: ${req.authUser?.role}, Employee role required: Employee`);
+    if (req.authUser?.role === 'Administrator') {
+      console.log('[CHALLENGE-JOIN] Admin cannot join, rejecting');
+      return res.status(403).json({ error: 'Administrators cannot join challenges as participants.' });
+    }
+
+    if (challenge.status !== 'Active') {
+      console.log(`[CHALLENGE-JOIN] Challenge not active, status: ${challenge.status}`);
+      return res.status(400).json({ error: 'You can only join challenges that are currently Active.' });
+    }
+
+    // Validate evidence rule
+    if (challenge.evidenceRequired && !req.body.proof) {
+      console.log('[CHALLENGE-JOIN] Evidence required but not provided');
+      return res.status(400).json({ error: 'Evidence is required to submit this challenge.' });
+    }
+
+    const employeeName = req.body.employee || req.authUser?.metadata?.full_name || req.authUser?.metadata?.name || req.authUser?.email || 'Employee';
+    console.log(`[CHALLENGE-JOIN] Creating participation for: ${employeeName}`);
+
+    const newPart = {
+      id: `CHPN-${Date.now()}`,
+      challengeId: req.body.challengeId,
+      employee: employeeName,
+      progress: Number(req.body.progress || 0),
+      proof: req.body.proof ? (typeof req.body.proof === 'string' ? `[${typeof req.body.proof}:${Math.min(req.body.proof.length, 100)}bytes]` : '[binary]') : '',
+      proofFilename: req.body.proofFilename || '',
+      approval: req.body.progress == 100 ? 'Pending' : 'Open',
+      xpAwarded: 0
+    };
+
+    db.challengeParticipation.unshift(newPart);
+    dbHelper.writeDb(db);
+    console.log(`[CHALLENGE-JOIN] Success: ${newPart.id}`);
+    res.status(201).json(newPart);
+  } catch (err) {
+    console.error('[CHALLENGE-JOIN] Server error:', err.message, err.stack);
+    res.status(500).json({ error: 'Server error: ' + err.message });
   }
-
-  if (challenge.status !== 'Active') {
-    return res.status(400).json({ error: 'You can only join challenges that are currently Active.' });
-  }
-
-  // Validate evidence rule
-  if (challenge.evidenceRequired && !req.body.proof) {
-    return res.status(400).json({ error: 'Evidence is required to submit this challenge.' });
-  }
-
-  const employeeName = req.body.employee || req.authUser?.metadata?.full_name || req.authUser?.metadata?.name || req.authUser?.email || 'Employee';
-
-  const newPart = {
-    id: `CHPN-${Date.now()}`,
-    challengeId: req.body.challengeId,
-    employee: employeeName,
-    progress: Number(req.body.progress || 0),
-    proof: req.body.proof || '',
-    proofFilename: req.body.proofFilename || '',
-    approval: req.body.progress == 100 ? 'Pending' : 'Open', // wait for admin if 100%
-    xpAwarded: 0
-  };
-
-  db.challengeParticipation.unshift(newPart);
-  dbHelper.writeDb(db);
-  res.status(201).json(newPart);
 });
 
 // Update challenge progress

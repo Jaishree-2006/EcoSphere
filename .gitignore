@@ -6,3 +6,6 @@ yarn-debug.log*
 yarn-error.log*
 .agents/
 .gemini/
+
+.vercel
+.env*.local

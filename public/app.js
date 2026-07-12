@@ -3373,7 +3373,9 @@ async function submitChallengeJoin(e, challengeId, evidenceRequired) {
   }
 
   const errorData = await res.json().catch(() => ({ error: 'Unable to join challenge.' }));
-  showToast(errorData.error || 'Unable to join challenge.', 'danger');
+  const errorMsg = errorData.error || 'Unable to join challenge.';
+  console.error('[CHALLENGE-JOIN] Server error:', res.status, errorMsg);
+  showToast(errorMsg, 'danger');
 }
 
 async function updateChallengeLifecycle(challengeId, status) {
