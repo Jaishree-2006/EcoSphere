@@ -479,6 +479,14 @@ body {
   justify-content: space-between;
   margin-bottom: 12px;
   flex-shrink: 0;
+  overflow: visible;
+}
+
+.user-role-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  overflow: visible;
 }
 
 .wireframe-title {
@@ -530,18 +538,19 @@ body {
 .notification-bell-sketch {
   position: relative;
   border: 2px solid var(--border-color);
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 10px;
   cursor: pointer;
   background: var(--bg-secondary);
+  overflow: visible;
 }
 
 .notification-bell-sketch i {
-  font-size: 18px;
+  font-size: 20px;
   color: var(--text-main);
 }
 
