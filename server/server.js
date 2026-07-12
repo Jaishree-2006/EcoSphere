@@ -1341,6 +1341,11 @@ app.get('/api/reports', (req, res) => {
   res.json(filtered);
 });
 
+// Catch-all: Serve index.html for SPA routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/index.html'));
+});
+
 // Start Express Server
 function startServer(port) {
   const server = app.listen(port, () => {
