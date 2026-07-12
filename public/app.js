@@ -1574,7 +1574,7 @@ function renderFilteredChallenges(participations) {
           joinButtonHtml = `<button class="btn-sketch btn-amber w-100" onclick="updateChallengeProgress('${userPart.id}', ${userPart.progress}, ${ch.evidenceRequired})">Progress (${userPart.progress}%)</button>`;
         }
       } else {
-        joinButtonHtml = `<button class="btn-sketch btn-amber w-100" onclick="joinChallenge('${ch.id}')">Join Challenge</button>`;
+        joinButtonHtml = `<button class="btn-sketch btn-amber w-100" onclick="openChallengeJoinModal('${ch.id}', ${JSON.stringify(ch.title)}, ${ch.evidenceRequired})">Join Challenge</button>`;
       }
     } else {
       joinButtonHtml = `
@@ -3105,6 +3105,53 @@ async function joinChallenge(challengeId) {
   });
 
   if (res.ok) {
+    showToast('Challenge joined successfully.', 'success');
+    refreshView();
+    return;
+  }
+
+  const errorData = await res.json().catch(() => ({ error: 'Unable to join challenge.' }));
+  showToast(errorData.error || 'Unable to join challenge.', 'danger');
+}
+
+function openChallengeJoinModal(challengeId, challengeTitle, evidenceRequired) {
+  const html = `
+    <form onsubmit="submitChallengeJoin(event, '${challengeId}', ${evidenceRequired})">
+      <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">Joining: <b>${challengeTitle}</b></p>
+      <div class="form-group">
+        <label>Evidence file name or link${evidenceRequired ? ' (required)' : ' (optional)'}</label>
+        <input type="text" id="challenge-join-proof" class="styled-input" placeholder="e.g. photo.jpg or https://drive.link">
+        <small style="color:var(--text-muted); display:block; margin-top:6px;">Submit your proof here before joining. This is required if the challenge enforces evidence.</small>
+      </div>
+      <button type="submit" class="btn-sketch btn-sky w-100">Join Challenge</button>
+    </form>
+  `;
+  openModal('Join Challenge', html);
+}
+
+async function submitChallengeJoin(e, challengeId, evidenceRequired) {
+  e.preventDefault();
+  const proof = document.getElementById('challenge-join-proof').value.trim();
+  const employeeName = currentAuthUser?.user_metadata?.full_name || currentUser;
+
+  if (evidenceRequired && !proof) {
+    showToast('Evidence is required. Enter a proof file name or link before joining.', 'danger');
+    return;
+  }
+
+  if (!employeeName || currentAuthRole === 'Administrator') {
+    showToast('Please sign in as a non-admin employee to join a challenge.', 'warning');
+    return;
+  }
+
+  const res = await fetch(`${API_BASE}/challenge-participation`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ challengeId, employee: employeeName, progress: 0, proof })
+  });
+
+  if (res.ok) {
+    closeModal();
     showToast('Challenge joined successfully.', 'success');
     refreshView();
     return;
