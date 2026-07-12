@@ -743,6 +743,14 @@ app.post('/api/challenge-participation', (req, res) => {
   const challenge = db.challenges.find((c) => c.id === req.body.challengeId);
   if (!challenge) return res.status(404).json({ error: 'Challenge not found' });
 
+  if (req.authUser?.role === 'Administrator') {
+    return res.status(403).json({ error: 'Administrators cannot join challenges as participants.' });
+  }
+
+  if (challenge.status !== 'Active') {
+    return res.status(400).json({ error: 'You can only join challenges that are currently Active.' });
+  }
+
   // Validate evidence rule
   if (challenge.evidenceRequired && !req.body.proof) {
     return res.status(400).json({ error: 'Evidence is required to submit this challenge.' });
@@ -1039,16 +1047,18 @@ app.get('/api/diversity-metrics', (req, res) => {
   const db = dbHelper.readDb();
 
   const total = db.employees.length;
-  const genderCounts = {};
+  const genderCounts = { Male: 0, Female: 0 };
   db.employees.forEach((e) => {
-    const g = e.gender || 'Unspecified';
-    genderCounts[g] = (genderCounts[g] || 0) + 1;
+    const genderValue = (e.gender || '').trim();
+    if (genderValue === 'Male' || genderValue === 'Female') {
+      genderCounts[genderValue] += 1;
+    }
   });
 
-  const genderBreakdown = Object.entries(genderCounts).map(([label, count]) => ({
+  const genderBreakdown = ['Male', 'Female'].map((label) => ({
     label,
-    count,
-    pct: total > 0 ? Math.round((count / total) * 100) : 0
+    count: genderCounts[label],
+    pct: total > 0 ? Math.round((genderCounts[label] / total) * 100) : 0
   }));
 
   // Training completions

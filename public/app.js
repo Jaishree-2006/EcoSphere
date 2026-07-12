@@ -19,11 +19,11 @@ const nativeFetch = window.fetch.bind(window);
 
 const ROLE_PERMISSIONS = {
   Administrator: ['dashboard', 'environmental', 'social', 'governance', 'gamification', 'reports', 'settings'],
-  'ESG Manager': ['dashboard', 'environmental', 'reports'],
-  'HR Manager': ['dashboard', 'social', 'reports'],
-  'Compliance Officer': ['dashboard', 'governance', 'reports'],
-  'Department Head': ['dashboard', 'environmental', 'social'],
-  Employee: ['dashboard', 'social', 'gamification']
+  'ESG Manager': ['dashboard', 'environmental', 'reports', 'settings'],
+  'HR Manager': ['dashboard', 'social', 'reports', 'settings'],
+  'Compliance Officer': ['dashboard', 'governance', 'reports', 'settings'],
+  'Department Head': ['dashboard', 'environmental', 'social', 'gamification', 'settings'],
+  Employee: ['dashboard', 'social', 'gamification', 'settings']
 };
 
 // Keep track of selected rows
@@ -613,11 +613,15 @@ function switchSubTab(tabId) {
     });
   }
 
-  // Clear selections
-  const selectedKeys = Object.keys(selectedRowId);
-  selectedKeys.forEach(k => selectedRowId[k] = null);
-
+  clearTableSelections();
   refreshView();
+}
+
+function clearTableSelections() {
+  document.querySelectorAll('.table-sketch tbody tr.selected').forEach(row => row.classList.remove('selected'));
+  Object.keys(selectedRowId).forEach(key => {
+    selectedRowId[key] = null;
+  });
 }
 
 function refreshView() {
@@ -754,22 +758,21 @@ function bindRowSelection(tableId, stateKey) {
   const tbody = document.querySelector(`#${tableId} tbody`);
   if (!tbody) return;
   
-  tbody.addEventListener('click', (e) => {
+  tbody.onclick = (e) => {
     const tr = e.target.closest('tr');
-    if (!tr || tr.cells.length <= 1 && tr.cells[0].classList.contains('text-center')) return;
+    if (!tr || !tr.hasAttribute('data-id')) return;
 
     const id = tr.getAttribute('data-id');
     const rows = tbody.querySelectorAll('tr');
-    
     rows.forEach(r => r.classList.remove('selected'));
-    
+
     if (selectedRowId[stateKey] === id) {
-      selectedRowId[stateKey] = null; // Toggle off
+      selectedRowId[stateKey] = null;
     } else {
       tr.classList.add('selected');
       selectedRowId[stateKey] = id;
     }
-  });
+  };
 }
 
 // ==========================================
@@ -1281,10 +1284,14 @@ async function loadSocialDiversityMetrics() {
       csrEl.innerHTML = `${metrics.csrParticipationRate}% <small>of Staff</small>`;
     }
 
-    // Gender breakdown
+    // Gender breakdown, only show Male and Female categories
     const genderEl = document.getElementById('div-gender-breakdown');
     if (genderEl) {
-      genderEl.innerHTML = metrics.genderBreakdown.map(g =>
+      const filteredGenders = metrics.genderBreakdown
+        .filter(g => ['Male', 'Female'].includes(g.label))
+        .sort((a, b) => (a.label === 'Male' ? -1 : 1));
+
+      genderEl.innerHTML = filteredGenders.map(g =>
         `<div class="diversity-stat">
           <span class="diversity-label">${g.label}</span>
           <div class="progress-bar-bg" style="height:10px; width:120px; display:inline-block; vertical-align:middle;">
@@ -1563,18 +1570,31 @@ function renderFilteredChallenges(participations) {
   filtered.forEach(ch => {
     const userPart = participations.find(p => p.challengeId === ch.id && p.employee.toLowerCase() === currentUser.toLowerCase());
     
+    const challengeAccessible = ch.status === 'Active';
+    const canShowProgress = userPart && (userPart.approval === 'Open' || userPart.approval === 'Rejected');
     let joinButtonHtml = '';
+
     if (currentAuthRole !== 'Administrator') {
       if (userPart) {
         if (userPart.approval === 'Approved') {
           joinButtonHtml = `<button class="btn-sketch btn-grey w-100" disabled>Approved</button>`;
         } else if (userPart.approval === 'Pending') {
           joinButtonHtml = `<button class="btn-sketch btn-grey w-100" disabled>Pending Validation</button>`;
+        } else if (canShowProgress) {
+          const progressLabel = userPart.approval === 'Rejected'
+            ? `Resubmit (${userPart.progress}%)`
+            : userPart.progress > 0
+              ? `Progress (${userPart.progress}%)`
+              : 'Start Progress';
+          joinButtonHtml = `<button class="btn-sketch btn-amber w-100" onclick="openChallengeProgressModal('${userPart.id}', ${userPart.progress}, ${ch.evidenceRequired})">${progressLabel}</button>`;
         } else {
-          joinButtonHtml = `<button class="btn-sketch btn-amber w-100" onclick="updateChallengeProgress('${userPart.id}', ${userPart.progress}, ${ch.evidenceRequired})">Progress (${userPart.progress}%)</button>`;
+          joinButtonHtml = `<button class="btn-sketch btn-grey w-100" disabled>Unavailable</button>`;
         }
-      } else {
+      } else if (challengeAccessible) {
         joinButtonHtml = `<button class="btn-sketch btn-amber w-100" onclick="openChallengeJoinModal('${ch.id}', ${ch.evidenceRequired})">Join Challenge</button>`;
+      } else {
+        const unavailableLabel = ch.status === 'Draft' ? 'Draft challenge' : ch.status === 'Archived' ? 'Closed' : ch.status;
+        joinButtonHtml = `<button class="btn-sketch btn-grey w-100" disabled>${unavailableLabel}</button>`;
       }
     } else {
       joinButtonHtml = `
@@ -1681,7 +1701,7 @@ async function loadChallengeParticipationQueue() {
       const ch = chs.find(c => c.id === p.challengeId);
       
       let actionsHtml = '-';
-      if (currentUser === 'Admin' && p.approval === 'Pending') {
+      if (['Administrator', 'HR Manager', 'Department Head'].includes(currentAuthRole) && p.approval === 'Pending') {
         actionsHtml = `
           <button class="btn-sketch btn-emerald btn-small" onclick="approveChallengeSub('${p.id}', true)">Approve</button>
           <button class="btn-sketch btn-danger btn-small" onclick="approveChallengeSub('${p.id}', false)">Reject</button>
@@ -2059,6 +2079,8 @@ async function loadSettingsCategories() {
       `;
       tbody.appendChild(tr);
     });
+
+    bindRowSelection('categories-table', 'categories');
   } catch (err) {
     console.error(err);
   }
@@ -3186,20 +3208,30 @@ async function getChallengeProofData() {
 
   if (file) {
     const proof = await readFileAsDataUrl(file);
-    return { proof, proofFilename: file.name };
+    return { proof, proofFilename: file.name, usedFile: true };
   }
 
-  return { proof: proofLink, proofFilename: proofLink ? proofLink.split('/').pop() : '' };
+  return { proof: proofLink, proofFilename: proofLink ? proofLink.split('/').pop() : '', usedFile: false };
+}
+
+function isValidImageUrl(value) {
+  return typeof value === 'string' && /^https?:\/\/.+\.(jpg|jpeg|png|gif|bmp|webp)(\?.*)?$/i.test(value);
 }
 
 async function submitChallengeJoin(e, challengeId, evidenceRequired) {
   e.preventDefault();
-  const { proof, proofFilename } = await getChallengeProofData();
+  const { proof, proofFilename, usedFile } = await getChallengeProofData();
   const employeeName = currentAuthUser?.user_metadata?.full_name || currentUser;
 
-  if (evidenceRequired && !proof) {
-    showToast('Evidence is required. Upload a photo or provide a proof link before joining.', 'danger');
-    return;
+  if (evidenceRequired) {
+    if (!proof) {
+      showToast('Evidence is required. Upload a photo or provide an image URL before joining.', 'danger');
+      return;
+    }
+    if (!usedFile && !isValidImageUrl(proof)) {
+      showToast('Required evidence must be an uploaded image or a valid image URL.', 'danger');
+      return;
+    }
   }
 
   if (!employeeName || currentAuthRole === 'Administrator') {

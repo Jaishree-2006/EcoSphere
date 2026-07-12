@@ -115,9 +115,16 @@ async function handleSignupSubmit(event) {
 
   if (data.session) {
     window.location.href = 'index.html';
-  } else {
-    setMessage('Account created. Check your email for verification.', 'success');
+    return;
   }
+
+  const { error: signInError } = await supabaseClient.auth.signInWithPassword({ email, password });
+  if (!signInError) {
+    window.location.href = 'index.html';
+    return;
+  }
+
+  setMessage('Account created. You can now log in with email and password.', 'success');
 }
 
 async function handleForgotSubmit(event) {
