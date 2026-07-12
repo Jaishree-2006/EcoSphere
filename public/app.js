@@ -139,8 +139,9 @@ window.fetch = async (input, init = {}) => {
 
   const { data } = await supabaseClient.auth.getSession();
   const token = data?.session?.access_token;
-  const headers = new Headers(init.headers || (typeof input !== 'string' && input.headers) || {});
-
+  
+  // Preserve original headers and add Authorization
+  const headers = new Headers(init.headers || {});
   if (token) {
     headers.set('Authorization', `Bearer ${token}`);
   }
