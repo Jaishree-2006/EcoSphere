@@ -394,10 +394,11 @@ body {
 /* --- Layout Structure --- */
 .app-container {
   display: flex;
-  width: 100vw;
-  height: 98vh;
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
   gap: 16px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* --- Excalidraw Sidebar --- */
@@ -469,6 +470,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-width: 0;
   overflow: visible;
 }
 
@@ -480,13 +482,17 @@ body {
   margin-bottom: 12px;
   flex-shrink: 0;
   overflow: visible;
+  width: 100%;
 }
 
 .user-role-bar {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 16px;
+  flex-wrap: wrap;
   overflow: visible;
+  min-width: 0;
 }
 
 .wireframe-title {
@@ -570,6 +576,28 @@ body {
   display: none;
   align-items: center;
   justify-content: center;
+}
+
+@media (max-width: 960px) {
+  .top-status-header {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .wireframe-title {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .user-role-bar {
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .notification-bell-sketch {
+    margin-right: 0;
+  }
 }
 
 /* --- Browser Window Wireframe --- */
