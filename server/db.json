@@ -705,6 +705,19 @@
   ],
   "auditLogs": [
     {
+      "id": "AUTH-1783855151223-541",
+      "timestamp": "2026-07-12T11:19:11.224Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
       "id": "AUTH-1783854964356-829",
       "timestamp": "2026-07-12T11:16:04.357Z",
       "actor": "jaichan2020@gmail.com",
