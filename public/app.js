@@ -1574,7 +1574,7 @@ function renderFilteredChallenges(participations) {
           joinButtonHtml = `<button class="btn-sketch btn-amber w-100" onclick="updateChallengeProgress('${userPart.id}', ${userPart.progress}, ${ch.evidenceRequired})">Progress (${userPart.progress}%)</button>`;
         }
       } else {
-        joinButtonHtml = `<button class="btn-sketch btn-amber w-100" onclick="openChallengeJoinModal('${ch.id}', ${JSON.stringify(ch.title)}, ${ch.evidenceRequired})">Join Challenge</button>`;
+        joinButtonHtml = `<button class="btn-sketch btn-amber w-100" onclick="openChallengeJoinModal('${ch.id}', ${ch.evidenceRequired})">Join Challenge</button>`;
       }
     } else {
       joinButtonHtml = `
@@ -3114,7 +3114,10 @@ async function joinChallenge(challengeId) {
   showToast(errorData.error || 'Unable to join challenge.', 'danger');
 }
 
-function openChallengeJoinModal(challengeId, challengeTitle, evidenceRequired) {
+function openChallengeJoinModal(challengeId, evidenceRequired) {
+  const challenge = allChallenges.find((ch) => ch.id === challengeId);
+  const challengeTitle = challenge?.title || 'Challenge';
+
   const html = `
     <form onsubmit="submitChallengeJoin(event, '${challengeId}', ${evidenceRequired})">
       <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">Joining: <b>${challengeTitle}</b></p>
