@@ -899,6 +899,21 @@ body {
   background-color: var(--bg-secondary);
 }
 
+.proof-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+.proof-preview img {
+  border-radius: 10px;
+  max-width: 140px;
+  max-height: 96px;
+  object-fit: cover;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
 .table-sketch {
   width: 100%;
   border-collapse: collapse;

@@ -1688,12 +1688,30 @@ async function loadChallengeParticipationQueue() {
         `;
       }
 
+      let proofHtml = '<span class="text-muted">None</span>';
+      if (p.proof) {
+        if (typeof p.proof === 'string' && p.proof.startsWith('data:image')) {
+          const filename = p.proofFilename || 'Uploaded Image';
+          proofHtml = `
+            <div class="proof-preview">
+              <img src="${p.proof}" alt="${filename}" style="max-width:120px; max-height:80px; border-radius:8px; display:block; margin-bottom:6px;" />
+              <div><small style="color:var(--text-muted);">${filename}</small></div>
+            </div>
+          `;
+        } else if (typeof p.proof === 'string' && p.proof.match(/^https?:\/\//)) {
+          const filename = p.proofFilename || p.proof;
+          proofHtml = `<a href="${p.proof}" target="_blank" rel="noopener noreferrer">${filename}</a>`;
+        } else {
+          proofHtml = `<code>${p.proofFilename || p.proof}</code>`;
+        }
+      }
+
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td><b>${p.employee}</b></td>
         <td>${ch ? ch.title : 'Challenge'}</td>
         <td>${p.progress}%</td>
-        <td>${p.proof ? `<code>${p.proof}</code>` : 'None'}</td>
+        <td>${proofHtml}</td>
         <td><span class="status-pill-sketch ${p.approval.toLowerCase()}">${p.approval}</span></td>
         <td>${actionsHtml}</td>
       `;
@@ -2333,9 +2351,14 @@ function openChallengeProgressModal(partId, currentProgress, proofRequired) {
         <input type="number" id="ch-prog-val" class="styled-input" min="0" max="100" value="${currentProgress}">
       </div>
       <div class="form-group">
-        <label>Evidence file name or link ${proofRequired ? '(required at 100%)' : ''}</label>
-        <input type="text" id="ch-prog-proof" class="styled-input" placeholder="e.g. proof.pdf or drive link">
-        <small style="color:var(--text-muted); display:block; margin-top:6px;">Submit evidence in this field before pressing Update Progress.</small>
+        <label>Upload evidence photo${proofRequired ? ' (required at 100%)' : ''}</label>
+        <input type="file" id="ch-prog-file" class="styled-input" accept="image/*">
+        <small style="color:var(--text-muted); display:block; margin-top:6px;">Upload a photo or screenshot of your completion evidence.</small>
+      </div>
+      <div class="form-group">
+        <label>Evidence link or filename</label>
+        <input type="text" id="ch-prog-proof" class="styled-input" placeholder="e.g. proof.pdf or https://drive.link">
+        <small style="color:var(--text-muted); display:block; margin-top:6px;">Optional if you uploaded a photo. Otherwise, provide a document link or filename.</small>
       </div>
       <button type="submit" class="btn-sketch btn-amber w-100">Update Progress</button>
     </form>
@@ -2346,17 +2369,27 @@ function openChallengeProgressModal(partId, currentProgress, proofRequired) {
 async function submitChallengeProgress(e, partId, proofRequired) {
   e.preventDefault();
   const prog = parseInt(document.getElementById('ch-prog-val').value, 10);
-  const proof = document.getElementById('ch-prog-proof').value;
+  const fileInput = document.getElementById('ch-prog-file');
+  const file = fileInput?.files?.[0];
+  const proofLink = document.getElementById('ch-prog-proof').value.trim();
+  const proof = file ? await readFileAsDataUrl(file) : proofLink;
+  const proofFilename = file ? file.name : (proofLink ? proofLink.split('/').pop() : '');
 
   if (prog === 100 && proofRequired && !proof) {
-    showToast('Proof is mandatory to complete this challenge. Enter it in the Evidence field in this modal.', 'danger');
+    showToast('Proof is mandatory to complete this challenge. Upload a photo or provide a proof link in this modal.', 'danger');
     return;
+  }
+
+  const payload = { progress: prog };
+  if (proof) {
+    payload.proof = proof;
+    payload.proofFilename = proofFilename;
   }
 
   const res = await fetch(`${API_BASE}/challenge-participation/${partId}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ progress: prog, proof })
+    body: JSON.stringify(payload)
   });
 
   if (res.ok) {
@@ -3122,9 +3155,14 @@ function openChallengeJoinModal(challengeId, evidenceRequired) {
     <form onsubmit="submitChallengeJoin(event, '${challengeId}', ${evidenceRequired})">
       <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">Joining: <b>${challengeTitle}</b></p>
       <div class="form-group">
-        <label>Evidence file name or link${evidenceRequired ? ' (required)' : ' (optional)'}</label>
-        <input type="text" id="challenge-join-proof" class="styled-input" placeholder="e.g. photo.jpg or https://drive.link">
-        <small style="color:var(--text-muted); display:block; margin-top:6px;">Submit your proof here before joining. This is required if the challenge enforces evidence.</small>
+        <label>Upload evidence photo${evidenceRequired ? ' (required)' : ''}</label>
+        <input type="file" id="challenge-join-file" class="styled-input" accept="image/*">
+        <small style="color:var(--text-muted); display:block; margin-top:6px;">Upload a photo or screenshot of your task completion.</small>
+      </div>
+      <div class="form-group">
+        <label>Evidence link or filename</label>
+        <input type="text" id="challenge-join-proof" class="styled-input" placeholder="e.g. https://drive.link or photo.jpg">
+        <small style="color:var(--text-muted); display:block; margin-top:6px;">Optional if you uploaded a photo. Otherwise, provide a document link or filename.</small>
       </div>
       <button type="submit" class="btn-sketch btn-sky w-100">Join Challenge</button>
     </form>
@@ -3132,13 +3170,35 @@ function openChallengeJoinModal(challengeId, evidenceRequired) {
   openModal('Join Challenge', html);
 }
 
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+
+async function getChallengeProofData() {
+  const fileInput = document.getElementById('challenge-join-file');
+  const file = fileInput?.files?.[0];
+  const proofLink = document.getElementById('challenge-join-proof')?.value.trim();
+
+  if (file) {
+    const proof = await readFileAsDataUrl(file);
+    return { proof, proofFilename: file.name };
+  }
+
+  return { proof: proofLink, proofFilename: proofLink ? proofLink.split('/').pop() : '' };
+}
+
 async function submitChallengeJoin(e, challengeId, evidenceRequired) {
   e.preventDefault();
-  const proof = document.getElementById('challenge-join-proof').value.trim();
+  const { proof, proofFilename } = await getChallengeProofData();
   const employeeName = currentAuthUser?.user_metadata?.full_name || currentUser;
 
   if (evidenceRequired && !proof) {
-    showToast('Evidence is required. Enter a proof file name or link before joining.', 'danger');
+    showToast('Evidence is required. Upload a photo or provide a proof link before joining.', 'danger');
     return;
   }
 
@@ -3150,7 +3210,7 @@ async function submitChallengeJoin(e, challengeId, evidenceRequired) {
   const res = await fetch(`${API_BASE}/challenge-participation`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ challengeId, employee: employeeName, progress: 0, proof })
+    body: JSON.stringify({ challengeId, employee: employeeName, progress: 0, proof, proofFilename })
   });
 
   if (res.ok) {

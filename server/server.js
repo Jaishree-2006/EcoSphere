@@ -754,6 +754,7 @@ app.post('/api/challenge-participation', (req, res) => {
     employee: req.body.employee,
     progress: Number(req.body.progress || 0),
     proof: req.body.proof || '',
+    proofFilename: req.body.proofFilename || '',
     approval: req.body.progress == 100 ? 'Pending' : 'Open', // wait for admin if 100%
     xpAwarded: 0
   };
@@ -776,6 +777,7 @@ app.put('/api/challenge-participation/:id', (req, res) => {
 
   part.progress = Number(req.body.progress);
   if (req.body.proof) part.proof = req.body.proof;
+  if (req.body.proofFilename) part.proofFilename = req.body.proofFilename;
   
   if (part.progress === 100) {
     part.approval = 'Pending';
