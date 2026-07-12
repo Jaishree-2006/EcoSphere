@@ -240,11 +240,9 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  opacity: 0.35;
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cg fill='none' stroke='%233a4654' stroke-width='2'%3E%3Cpath d='M24 36c12-8 20 8 8 14-10 4-18-8-8-14z'/%3E%3Cpath d='M88 28c8 0 16 8 16 16s-8 16-16 16-16-8-16-16 8-16 16-16z'/%3E%3Cpath d='M152 34l18 10-18 10-18-10z'/%3E%3Cpath d='M42 108h36v24H42z'/%3E%3Cpath d='M116 100c18 0 28 14 28 28s-10 28-28 28-28-14-28-28 10-28 28-28z'/%3E%3Cpath d='M166 120l16 22-16 22-16-22z'/%3E%3Cpath d='M26 178c10-10 22-10 32 0'/%3E%3Cpath d='M86 178h34'/%3E%3Cpath d='M144 184c10-8 20-8 30 0'/%3E%3C/g%3E%3C/svg%3E");
-  background-size: 240px 240px;
-  background-repeat: repeat;
+  opacity: 0.15;
+  background: radial-gradient(circle at top left, rgba(89, 178, 89, 0.18), transparent 28%),
+              radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.16), transparent 26%);
   pointer-events: none;
 }
 
@@ -532,14 +530,19 @@ body {
 .notification-bell-sketch {
   position: relative;
   border: 2px solid var(--border-color);
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   background: var(--bg-secondary);
+}
+
+.notification-bell-sketch i {
+  font-size: 18px;
+  color: var(--text-main);
 }
 
 .notification-bell-sketch .badge {
@@ -554,7 +557,7 @@ body {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
 }
