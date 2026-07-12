@@ -81,9 +81,8 @@ function handleAuthState(session) {
   applyRolePermissions();
 
   if (user) {
-    if (user.user_metadata?.full_name) {
-      currentUser = user.user_metadata.full_name;
-    }
+    const authDisplayName = user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'Employee';
+    currentUser = authDisplayName;
     loadGlobalConfig().then(async () => {
       // Fix #1: Provision employee record on first login if needed
       await provisionEmployeeIfNeeded();
@@ -178,7 +177,7 @@ async function recordAuthEvent(eventType) {
 async function provisionEmployeeIfNeeded() {
   if (!currentAuthUser || currentAuthRole === 'Administrator') return;
 
-  const fullName = currentAuthUser.user_metadata?.full_name;
+  const fullName = currentAuthUser.user_metadata?.full_name || currentAuthUser.user_metadata?.name || currentAuthUser.email?.split('@')[0] || '';
   if (!fullName) return;
 
   try {
@@ -275,6 +274,20 @@ function normalizeRole(role) {
   if (value.includes('compliance') || value.includes('audit')) return 'Compliance Officer';
   if (value.includes('department')) return 'Department Head';
   return 'Employee';
+}
+
+function getCurrentEmployeeDisplayName() {
+  const metadataName = currentAuthUser?.user_metadata?.full_name || currentAuthUser?.user_metadata?.name || '';
+  const emailPrefix = currentAuthUser?.email?.split('@')[0] || '';
+  const fallbackName = currentUser && currentUser !== 'Admin' ? currentUser : '';
+  return metadataName || fallbackName || emailPrefix || 'Employee';
+}
+
+function participationMatchesCurrentEmployee(participation) {
+  const participantName = String(participation?.employee || '').trim().toLowerCase();
+  const currentName = getCurrentEmployeeDisplayName().trim().toLowerCase();
+  const currentEmailPrefix = String(currentAuthUser?.email || '').split('@')[0].toLowerCase();
+  return Boolean(participantName && (participantName === currentName || participantName === currentEmailPrefix));
 }
 
 function getAllowedViewsForRole(role) {
@@ -1590,8 +1603,8 @@ function renderFilteredChallenges(participations) {
   }
 
   filtered.forEach(ch => {
-    const userPart = participations.find(p => p.challengeId === ch.id && p.employee.toLowerCase() === currentUser.toLowerCase());
-    
+    const userPart = participations.find((p) => p.challengeId === ch.id && participationMatchesCurrentEmployee(p));
+
     const challengeAccessible = ch.status === 'Active';
     const canShowProgress = userPart && (userPart.approval === 'Open' || userPart.approval === 'Rejected');
     let joinButtonHtml = '';
@@ -3254,8 +3267,8 @@ async function submitCategoryForm(e) {
 
 // Join challenge logic
 async function joinChallenge(challengeId) {
-  const employeeName = currentAuthUser?.user_metadata?.full_name || currentUser;
-  if (!employeeName || currentAuthRole === 'Administrator') {
+  const employeeName = getCurrentEmployeeDisplayName();
+  if (!currentAuthUser || currentAuthRole === 'Administrator') {
     showToast('Please sign in as a non-admin employee to join a challenge.', 'warning');
     return;
   }
@@ -3328,7 +3341,7 @@ function isValidImageUrl(value) {
 async function submitChallengeJoin(e, challengeId, evidenceRequired) {
   e.preventDefault();
   const { proof, proofFilename, usedFile } = await getChallengeProofData();
-  const employeeName = currentAuthUser?.user_metadata?.full_name || currentUser;
+  const employeeName = getCurrentEmployeeDisplayName();
 
   if (evidenceRequired) {
     if (!proof) {

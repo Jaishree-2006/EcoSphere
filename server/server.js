@@ -786,10 +786,12 @@ app.post('/api/challenge-participation', (req, res) => {
     return res.status(400).json({ error: 'Evidence is required to submit this challenge.' });
   }
 
+  const employeeName = req.body.employee || req.authUser?.metadata?.full_name || req.authUser?.metadata?.name || req.authUser?.email || 'Employee';
+
   const newPart = {
     id: `CHPN-${Date.now()}`,
     challengeId: req.body.challengeId,
-    employee: req.body.employee,
+    employee: employeeName,
     progress: Number(req.body.progress || 0),
     proof: req.body.proof || '',
     proofFilename: req.body.proofFilename || '',
