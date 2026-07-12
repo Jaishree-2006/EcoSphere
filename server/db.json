@@ -10,9 +10,9 @@
     "badgeAutoAward": true,
     "notifications": {
       "complianceIssues": true,
-      "approvals": true,
-      "reminders": true,
-      "badgeUnlocks": true
+      "approvals": false,
+      "reminders": false,
+      "badgeUnlocks": false
     }
   },
   "departments": [
@@ -95,14 +95,6 @@
       "status": "Active"
     },
     {
-      "id": "EF-02",
-      "activity": "Manufacturing",
-      "scope": "Scope 1",
-      "value": 2.5,
-      "unit": "kWh",
-      "status": "Active"
-    },
-    {
       "id": "EF-03",
       "activity": "Fleet",
       "scope": "Scope 1",
@@ -116,6 +108,14 @@
       "scope": "Scope 3",
       "value": 0.22,
       "unit": "km",
+      "status": "Active"
+    },
+    {
+      "id": "EF-1783854221788",
+      "activity": "buu",
+      "scope": "Scope 1",
+      "value": 89,
+      "unit": "kg",
       "status": "Active"
     }
   ],
@@ -149,15 +149,6 @@
     }
   ],
   "goals": [
-    {
-      "id": "G-01",
-      "name": "Reduce Fleet Emissions",
-      "department": "Logistics",
-      "targetCO2": 500,
-      "currentCO2": 390,
-      "deadline": "2026-12-31",
-      "status": "On Track"
-    },
     {
       "id": "G-02",
       "name": "Cut Packaging Waste",
@@ -224,6 +215,27 @@
       "description": "Awarded for acknowledging at least 2 governance policies.",
       "unlockRule": "policiesAcknowledged >= 2",
       "icon": "📜"
+    },
+    {
+      "id": "BDG-1783854172334",
+      "name": "Test Badge",
+      "description": "Test Desc",
+      "unlockRule": "xp >= 100",
+      "icon": "??"
+    },
+    {
+      "id": "BDG-1783854761750",
+      "name": "?? Eco Starter",
+      "description": "Completed first CSR activity",
+      "unlockRule": "xp >= 50",
+      "icon": "??"
+    },
+    {
+      "id": "BDG-1783854841337",
+      "name": "nhhv",
+      "description": "vtf yugtv hbv",
+      "unlockRule": "completed challenge >= 3",
+      "icon": "😂"
     }
   ],
   "rewards": [
@@ -249,6 +261,30 @@
       "description": "Durable tote bag made from certified organic cotton.",
       "pointsRequired": 100,
       "stock": 15,
+      "status": "Active"
+    },
+    {
+      "id": "REW-1783854511409",
+      "name": "Test Reward",
+      "description": "Test Desc",
+      "pointsRequired": 100,
+      "stock": 10,
+      "status": "Active"
+    },
+    {
+      "id": "REW-1783854761834",
+      "name": "Eco Water Bottle",
+      "description": "Reusable bottle",
+      "pointsRequired": 80,
+      "stock": 20,
+      "status": "Active"
+    },
+    {
+      "id": "REW-1783854827391",
+      "name": "enbe ",
+      "description": "neboe ",
+      "pointsRequired": 10,
+      "stock": 6,
       "status": "Active"
     }
   ],
@@ -383,6 +419,28 @@
       "evidenceRequired": true,
       "deadline": "2026-08-01",
       "status": "Draft"
+    },
+    {
+      "id": "CH-1783854504974",
+      "title": "Test Challenge",
+      "category": "Carbon Reduction",
+      "description": "Test Desc",
+      "xp": 100,
+      "difficulty": "Easy",
+      "evidenceRequired": true,
+      "deadline": "2026-12-31",
+      "status": "Active"
+    },
+    {
+      "id": "CH-1783854761825",
+      "title": "Green Commute",
+      "category": "Carbon Reduction",
+      "description": "Use public transport for a week",
+      "xp": 75,
+      "difficulty": "Easy",
+      "evidenceRequired": false,
+      "deadline": "2026-12-31",
+      "status": "Active"
     }
   ],
   "challengeParticipation": [
@@ -535,70 +593,70 @@
       "type": "Approval",
       "message": "Challenge 'Bike to Work Day' approved for Aditi Rao. +50 XP!",
       "timestamp": "2026-07-12T09:17:22.655Z",
-      "read": false
+      "read": true
     },
     {
       "id": "NOT-1783847833619",
       "type": "Approval",
       "message": "Challenge 'Zero Waste Week' approved for Jaishree M. +100 XP!",
       "timestamp": "2026-07-12T09:17:13.620Z",
-      "read": false
+      "read": true
     },
     {
       "id": "NOT-1783847580660",
       "type": "Approval",
       "message": "CSR Activity 'Tree Plantation Drive' participation rejected for Aditi Rao.",
       "timestamp": "2026-07-12T09:13:00.660Z",
-      "read": false
+      "read": true
     },
     {
       "id": "NOT-REM-POL-03",
       "type": "Reminder",
       "message": "Policy acknowledgement reminder: 'Environmental Policy' still needs employee acknowledgements.",
       "timestamp": "2026-07-12T07:22:36.389Z",
-      "read": false
+      "read": true
     },
     {
       "id": "NOT-REM-POL-02",
       "type": "Reminder",
       "message": "Policy acknowledgement reminder: 'Code of Conduct' still needs employee acknowledgements.",
       "timestamp": "2026-07-12T07:22:36.389Z",
-      "read": false
+      "read": true
     },
     {
       "id": "NOT-REM-POL-01",
       "type": "Reminder",
       "message": "Policy acknowledgement reminder: 'Anti-Corruption Policy' still needs employee acknowledgements.",
       "timestamp": "2026-07-12T07:22:36.389Z",
-      "read": false
+      "read": true
     },
     {
       "id": "NOT-1783829723932",
       "type": "Approval",
       "message": "CSR Activity 'Tree Plantation Drive' approved for Aditi Rao. +50 XP/Points!",
       "timestamp": "2026-07-12T04:15:23.933Z",
-      "read": false
+      "read": true
     },
     {
       "id": "NOT-1783824809986-CI-001",
       "type": "Overdue",
       "message": "OVERDUE WARNING: Compliance Issue [CI-001] owned by Karan Shah has passed its due date (2026-07-10).",
       "timestamp": "2026-07-12T02:53:29.991Z",
-      "read": false
+      "read": true
     },
     {
       "id": "NOT-01",
       "type": "Compliance",
       "message": "High Severity Compliance Issue raised for Q2 Waste Audit: Missing MSDS sheets.",
       "timestamp": "2026-07-10T10:00:00Z",
-      "read": false
+      "read": true
     },
     {
       "id": "NOT-02",
       "type": "Badge",
       "message": "Priya Sharma unlocked Badge: Carbon Ninja!",
       "timestamp": "2026-07-02T16:30:00Z",
-      "read": false
+      "read": true
     },
     {
       "id": "NOT-03",
@@ -646,6 +704,945 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": "AUTH-1783854964356-829",
+      "timestamp": "2026-07-12T11:16:04.357Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783854805143-479",
+      "timestamp": "2026-07-12T11:13:25.143Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783854805131-389",
+      "timestamp": "2026-07-12T11:13:25.131Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783854803630-621",
+      "timestamp": "2026-07-12T11:13:23.630Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "ACCESS_DENIED",
+      "route": "/api/departments",
+      "method": "GET",
+      "details": {
+        "allowedRoles": [
+          "Administrator"
+        ]
+      }
+    },
+    {
+      "id": "AUTH-1783854803493-450",
+      "timestamp": "2026-07-12T11:13:23.493Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "ACCESS_DENIED",
+      "route": "/api/departments",
+      "method": "GET",
+      "details": {
+        "allowedRoles": [
+          "Administrator"
+        ]
+      }
+    },
+    {
+      "id": "AUTH-1783854803011-334",
+      "timestamp": "2026-07-12T11:13:23.011Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783854424703-514",
+      "timestamp": "2026-07-12T11:07:04.703Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "ACCESS_DENIED",
+      "route": "/api/departments",
+      "method": "GET",
+      "details": {
+        "allowedRoles": [
+          "Administrator"
+        ]
+      }
+    },
+    {
+      "id": "AUTH-1783854424548-914",
+      "timestamp": "2026-07-12T11:07:04.548Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "ACCESS_DENIED",
+      "route": "/api/departments",
+      "method": "GET",
+      "details": {
+        "allowedRoles": [
+          "Administrator"
+        ]
+      }
+    },
+    {
+      "id": "AUTH-1783854423987-830",
+      "timestamp": "2026-07-12T11:07:03.987Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783854394768-801",
+      "timestamp": "2026-07-12T11:06:34.768Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "ACCESS_DENIED",
+      "route": "/api/departments",
+      "method": "GET",
+      "details": {
+        "allowedRoles": [
+          "Administrator"
+        ]
+      }
+    },
+    {
+      "id": "AUTH-1783854390784-280",
+      "timestamp": "2026-07-12T11:06:30.784Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "ACCESS_DENIED",
+      "route": "/api/categories",
+      "method": "GET",
+      "details": {
+        "allowedRoles": [
+          "Administrator"
+        ]
+      }
+    },
+    {
+      "id": "AUTH-1783854384814-334",
+      "timestamp": "2026-07-12T11:06:24.814Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "ACCESS_DENIED",
+      "route": "/api/departments",
+      "method": "GET",
+      "details": {
+        "allowedRoles": [
+          "Administrator"
+        ]
+      }
+    },
+    {
+      "id": "AUTH-1783854377971-18",
+      "timestamp": "2026-07-12T11:06:17.971Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783854369968-751",
+      "timestamp": "2026-07-12T11:06:09.968Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783854361495-781",
+      "timestamp": "2026-07-12T11:06:01.495Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "ACCESS_DENIED",
+      "route": "/api/rewards",
+      "method": "POST",
+      "details": {
+        "allowedRoles": [
+          "HR Manager",
+          "ESG Manager",
+          "Administrator"
+        ]
+      }
+    },
+    {
+      "id": "AUTH-1783854345506-485",
+      "timestamp": "2026-07-12T11:05:45.506Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783854311866-212",
+      "timestamp": "2026-07-12T11:05:11.866Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783854296969-685",
+      "timestamp": "2026-07-12T11:04:56.969Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783854275696-684",
+      "timestamp": "2026-07-12T11:04:35.696Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "ACCESS_DENIED",
+      "route": "/api/challenges",
+      "method": "POST",
+      "details": {
+        "allowedRoles": [
+          "HR Manager",
+          "ESG Manager",
+          "Administrator"
+        ]
+      }
+    },
+    {
+      "id": "AUTH-1783854274653-282",
+      "timestamp": "2026-07-12T11:04:34.653Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "ACCESS_DENIED",
+      "route": "/api/challenges",
+      "method": "POST",
+      "details": {
+        "allowedRoles": [
+          "HR Manager",
+          "ESG Manager",
+          "Administrator"
+        ]
+      }
+    },
+    {
+      "id": "AUTH-1783854248600-85",
+      "timestamp": "2026-07-12T11:04:08.600Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "ACCESS_DENIED",
+      "route": "/api/badges",
+      "method": "POST",
+      "details": {
+        "allowedRoles": [
+          "HR Manager",
+          "ESG Manager",
+          "Administrator"
+        ]
+      }
+    },
+    {
+      "id": "AUTH-1783854246054-287",
+      "timestamp": "2026-07-12T11:04:06.054Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "ACCESS_DENIED",
+      "route": "/api/badges",
+      "method": "POST",
+      "details": {
+        "allowedRoles": [
+          "HR Manager",
+          "ESG Manager",
+          "Administrator"
+        ]
+      }
+    },
+    {
+      "id": "AUTH-1783854245681-915",
+      "timestamp": "2026-07-12T11:04:05.681Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "ACCESS_DENIED",
+      "route": "/api/badges",
+      "method": "POST",
+      "details": {
+        "allowedRoles": [
+          "HR Manager",
+          "ESG Manager",
+          "Administrator"
+        ]
+      }
+    },
+    {
+      "id": "AUTH-1783854242557-62",
+      "timestamp": "2026-07-12T11:04:02.557Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "ACCESS_DENIED",
+      "route": "/api/badges",
+      "method": "POST",
+      "details": {
+        "allowedRoles": [
+          "HR Manager",
+          "ESG Manager",
+          "Administrator"
+        ]
+      }
+    },
+    {
+      "id": "AUTH-1783854230275-193",
+      "timestamp": "2026-07-12T11:03:50.275Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783854205061-714",
+      "timestamp": "2026-07-12T11:03:25.061Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783854205055-711",
+      "timestamp": "2026-07-12T11:03:25.055Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783854203304-450",
+      "timestamp": "2026-07-12T11:03:23.304Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783853979143-724",
+      "timestamp": "2026-07-12T10:59:39.143Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783853949128-340",
+      "timestamp": "2026-07-12T10:59:09.128Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783853916954-218",
+      "timestamp": "2026-07-12T10:58:36.954Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783853916634-230",
+      "timestamp": "2026-07-12T10:58:36.635Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783853886625-771",
+      "timestamp": "2026-07-12T10:58:06.626Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783853855319-542",
+      "timestamp": "2026-07-12T10:57:35.319Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783853825305-719",
+      "timestamp": "2026-07-12T10:57:05.305Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783853793924-776",
+      "timestamp": "2026-07-12T10:56:33.924Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783853763914-860",
+      "timestamp": "2026-07-12T10:56:03.914Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783853730859-770",
+      "timestamp": "2026-07-12T10:55:30.859Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783853730726-407",
+      "timestamp": "2026-07-12T10:55:30.726Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783853072095-465",
+      "timestamp": "2026-07-12T10:44:32.095Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783853072071-827",
+      "timestamp": "2026-07-12T10:44:32.071Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783852729896-946",
+      "timestamp": "2026-07-12T10:38:49.896Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783852729867-768",
+      "timestamp": "2026-07-12T10:38:49.868Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783852204942-448",
+      "timestamp": "2026-07-12T10:30:04.942Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783852204820-307",
+      "timestamp": "2026-07-12T10:30:04.824Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783851853419-132",
+      "timestamp": "2026-07-12T10:24:13.419Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783851853401-415",
+      "timestamp": "2026-07-12T10:24:13.402Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783851522356-997",
+      "timestamp": "2026-07-12T10:18:42.356Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783851522349-437",
+      "timestamp": "2026-07-12T10:18:42.349Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783851517515-203",
+      "timestamp": "2026-07-12T10:18:37.515Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783851517507-275",
+      "timestamp": "2026-07-12T10:18:37.507Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783850691754-831",
+      "timestamp": "2026-07-12T10:04:51.754Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783850691743-417",
+      "timestamp": "2026-07-12T10:04:51.744Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783850431493-144",
+      "timestamp": "2026-07-12T10:00:31.493Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783850431434-366",
+      "timestamp": "2026-07-12T10:00:31.434Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783850390241-64",
+      "timestamp": "2026-07-12T09:59:50.241Z",
+      "actor": "jaishreem.it2024@citchennai.net",
+      "role": "Employee",
+      "eventType": "LOGOUT",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "9805c7ef-208d-4e18-a202-cc10ce5e4191",
+        "email": "jaishreem.it2024@citchennai.net"
+      }
+    },
+    {
+      "id": "AUTH-1783850384165-398",
+      "timestamp": "2026-07-12T09:59:44.165Z",
+      "actor": "jaishreem.it2024@citchennai.net",
+      "role": "Employee",
+      "eventType": "ACCESS_DENIED",
+      "route": "/api/departments",
+      "method": "GET",
+      "details": {
+        "allowedRoles": [
+          "Administrator"
+        ]
+      }
+    },
+    {
+      "id": "AUTH-1783850365117-177",
+      "timestamp": "2026-07-12T09:59:25.117Z",
+      "actor": "jaishreem.it2024@citchennai.net",
+      "role": "Employee",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "9805c7ef-208d-4e18-a202-cc10ce5e4191",
+        "email": "jaishreem.it2024@citchennai.net"
+      }
+    },
+    {
+      "id": "AUTH-1783850365103-896",
+      "timestamp": "2026-07-12T09:59:25.103Z",
+      "actor": "jaishreem.it2024@citchennai.net",
+      "role": "Employee",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "9805c7ef-208d-4e18-a202-cc10ce5e4191",
+        "email": "jaishreem.it2024@citchennai.net"
+      }
+    },
+    {
+      "id": "AUTH-1783850348350-126",
+      "timestamp": "2026-07-12T09:59:08.350Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGOUT",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783850327173-582",
+      "timestamp": "2026-07-12T09:58:47.174Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783850327167-6",
+      "timestamp": "2026-07-12T09:58:47.167Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783850100359-221",
+      "timestamp": "2026-07-12T09:55:00.359Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783850100325-640",
+      "timestamp": "2026-07-12T09:55:00.325Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783849692577-679",
+      "timestamp": "2026-07-12T09:48:12.577Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783849692564-764",
+      "timestamp": "2026-07-12T09:48:12.565Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783849520841-226",
+      "timestamp": "2026-07-12T09:45:20.841Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783849520819-412",
+      "timestamp": "2026-07-12T09:45:20.819Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783848697120-573",
+      "timestamp": "2026-07-12T09:31:37.120Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
+    {
+      "id": "AUTH-1783848697113-921",
+      "timestamp": "2026-07-12T09:31:37.113Z",
+      "actor": "jaichan2020@gmail.com",
+      "role": "Department Head",
+      "eventType": "LOGIN",
+      "route": "/api/auth/activity",
+      "method": "POST",
+      "details": {
+        "userId": "2033160e-c081-4bf2-aa7b-f7492ba4adac",
+        "email": "jaichan2020@gmail.com"
+      }
+    },
     {
       "id": "AUTH-1783847785058-748",
       "timestamp": "2026-07-12T09:16:25.058Z",

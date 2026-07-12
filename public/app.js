@@ -37,8 +37,10 @@ let selectedRowId = {
   'compliance-issues': null,
   'csr-participation': null
 };
+let notificationRefreshInterval = null;
 
 const API_BASE = '/api';
+const LOCAL_DEMO_MODE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
 // --- Page Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -47,9 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
   
   document.getElementById('notification-bell-btn').addEventListener('click', toggleNotificationsSlideout);
   document.getElementById('notif-close-btn').addEventListener('click', toggleNotificationsSlideout);
-  
-  // Set intervals to check compliance overdue items
-  setInterval(refreshNotifications, 10000);
 });
 
 async function initAuth() {
@@ -98,7 +97,30 @@ function handleAuthState(session) {
     return;
   }
 
+  clearNotificationInterval();
   appStarted = false;
+
+  if (LOCAL_DEMO_MODE) {
+    currentSession = {};
+    currentAuthUser = { email: 'local-demo@ecosphere.local', user_metadata: { full_name: 'Local Demo User' }, app_metadata: {} };
+    currentAuthRole = 'Administrator';
+    currentUser = 'Local Demo User';
+    updateAuthSessionUi();
+    applyRolePermissions();
+    loadGlobalConfig().then(async () => {
+      await provisionEmployeeIfNeeded();
+      loadEmployeesSelector();
+      enterApp();
+      refreshNotifications();
+      refreshView();
+    });
+    recordAuthEvent('login');
+    setAuthMessage('Local demo mode enabled. Actions are permitted without login.', 'success');
+    document.getElementById('app-shell').classList.remove('hidden');
+    document.getElementById('welcome-screen').classList.add('hidden');
+    return;
+  }
+
   document.getElementById('app-shell').classList.add('hidden');
   document.getElementById('welcome-screen').classList.remove('hidden');
 }
@@ -108,6 +130,11 @@ window.fetch = async (input, init = {}) => {
   const shouldAttachAuth = requestUrl.startsWith(API_BASE) || requestUrl.startsWith('/api/');
 
   if (!shouldAttachAuth || !supabaseClient) {
+    return nativeFetch(input, init);
+  }
+
+  // In local demo mode, skip the async Supabase session call — server allows localhost without token
+  if (LOCAL_DEMO_MODE) {
     return nativeFetch(input, init);
   }
 
@@ -229,6 +256,13 @@ function updateAuthSessionUi() {
     logoutButton.disabled = false;
   } else {
     pill.classList.add('hidden');
+  }
+}
+
+function clearNotificationInterval() {
+  if (notificationRefreshInterval) {
+    clearInterval(notificationRefreshInterval);
+    notificationRefreshInterval = null;
   }
 }
 
@@ -483,6 +517,9 @@ function enterApp() {
   document.getElementById('app-shell').classList.remove('hidden');
   refreshView();
   refreshNotifications();
+  if (!notificationRefreshInterval) {
+    notificationRefreshInterval = setInterval(refreshNotifications, 10000);
+  }
 }
 
 // --- Navigation Engine ---
@@ -1107,21 +1144,49 @@ function exportGoalData(format = 'csv') {
 }
 
 // Edit or Delete selected row handles
+function getTableIdForModule(moduleKey) {
+  switch (moduleKey) {
+    case 'goals': return 'goals-table';
+    case 'emission-factors': return 'emission-factors-table';
+    case 'products': return 'products-table';
+    case 'carbon-transactions': return 'carbon-transactions-table';
+    case 'departments': return 'departments-table';
+    case 'categories': return 'categories-table';
+    case 'compliance-issues': return 'compliance-issues-table';
+    case 'csr-participation': return 'csr-participation-table';
+    default: return null;
+  }
+}
+
+function findSelectedRowId(moduleKey) {
+  const currentId = selectedRowId[moduleKey];
+  if (currentId) return currentId;
+
+  const tableId = getTableIdForModule(moduleKey);
+  if (!tableId) return null;
+
+  const selectedRow = document.querySelector(`#${tableId} tbody tr.selected`);
+  const selectedId = selectedRow?.getAttribute('data-id') || null;
+  if (selectedId) {
+    selectedRowId[moduleKey] = selectedId;
+  }
+  return selectedId;
+}
+
 function editSelectedRow(moduleKey) {
-  const selectedId = selectedRowId[moduleKey];
+  const selectedId = findSelectedRowId(moduleKey);
   if (!selectedId) {
     showToast('Please select a row in the table first!', 'warning');
     return;
   }
 
   if (moduleKey === 'goals') openGoalModal(selectedId);
-  if (moduleKey === 'emission-factors') openEmissionFactorModal(selectedId);
   if (moduleKey === 'products') openProductModal(selectedId);
   if (moduleKey === 'departments') openDepartmentModal(selectedId);
 }
 
 async function deleteSelectedRow(moduleKey) {
-  const selectedId = selectedRowId[moduleKey];
+  const selectedId = findSelectedRowId(moduleKey);
   if (!selectedId) {
     showToast('Please select a row first!', 'warning');
     return;
@@ -1135,65 +1200,22 @@ async function deleteSelectedRow(moduleKey) {
     if (moduleKey === 'carbon-transactions') url = `${API_BASE}/carbon-transactions/${selectedId}`;
     if (moduleKey === 'departments') url = `${API_BASE}/departments/${selectedId}`;
     
+    if (!url) {
+      showToast('Unable to determine delete endpoint.', 'danger');
+      return;
+    }
+
     const res = await fetch(url, { method: 'DELETE' });
     if (res.ok) {
       showToast('Selected registry item deleted.', 'success');
       selectedRowId[moduleKey] = null;
       refreshView();
+      return;
     }
-  }
-}
 
-// ==========================================
-// 3. SOCIAL DATA LOADERS
-// ==========================================
-async function loadCsrActivities() {
-  try {
-    const actRes = await fetch(`${API_BASE}/csr-activities`);
-    const activities = await actRes.json();
-    
-    const partRes = await fetch(`${API_BASE}/csr-participation`);
-    const participations = await partRes.json();
-
-    const grid = document.getElementById('csr-activities-grid');
-    grid.innerHTML = '';
-
-    activities.forEach(act => {
-      const joinedCount = participations.filter(p => p.activityId === act.id && p.approvalStatus === 'Approved').length;
-      const hasJoined = participations.find(p => p.activityId === act.id && p.employee.toLowerCase() === currentUser.toLowerCase());
-      
-      let joinButtonHtml = '';
-      if (currentAuthRole !== 'Administrator') {
-        if (hasJoined) {
-          joinButtonHtml = `<button class="btn-sketch btn-grey w-100" disabled>Requested (${hasJoined.approvalStatus})</button>`;
-        } else if (act.status === 'Closed') {
-          joinButtonHtml = `<button class="btn-sketch btn-grey w-100" disabled>Closed</button>`;
-        } else {
-          joinButtonHtml = `<button class="btn-sketch btn-sky w-100" onclick="openCsrJoinModal('${act.id}', '${act.title}')">Join</button>`;
-        }
-      } else {
-        joinButtonHtml = `<button class="btn-sketch btn-grey w-100" disabled>Admin Mode</button>`;
-      }
-
-      const isEvidence = act.description.includes('Evidence') || act.pointsAwarded >= 50;
-
-      const card = document.createElement('div');
-      card.className = 'csr-card-sketch';
-      card.innerHTML = `
-        <div>
-          <h4 class="csr-title-sketch">${act.title}</h4>
-          <div class="csr-meta-sketch">
-            <span>${joinedCount} joined</span> | <span>${isEvidence ? 'Evidence Required' : 'Open'}</span>
-          </div>
-        </div>
-        <div>
-          ${joinButtonHtml}
-        </div>
-      `;
-      grid.appendChild(card);
-    });
-  } catch (err) {
-    console.error(err);
+    const errorData = await res.json().catch(() => ({ error: 'Unable to delete item.' }));
+    console.error('Delete failed for', moduleKey, selectedId, res.status, errorData);
+    showToast(`${errorData.error || 'Unable to delete item.'} (${res.status})`, 'danger');
   }
 }
 
@@ -2155,10 +2177,26 @@ function loadSettingsNotifications() {
 // 8. NOTIFICATION CENTER
 // ==========================================
 async function refreshNotifications() {
+  if (!currentSession) {
+    const badge = document.getElementById('notification-count');
+    badge.innerText = '';
+    badge.style.display = 'none';
+    return;
+  }
+
   try {
     const res = await fetch(`${API_BASE}/notifications`);
+    if (!res.ok) {
+      console.error('Notification fetch failed:', res.status);
+      return;
+    }
+
     const notifications = await res.json();
-    
+    if (!Array.isArray(notifications)) {
+      console.error('Notification payload invalid:', notifications);
+      return;
+    }
+
     const unreadCount = notifications.filter(n => !n.read).length;
     const badge = document.getElementById('notification-count');
     badge.innerText = unreadCount;
@@ -2522,8 +2560,21 @@ async function submitGoalForm(e, id) {
 }
 
 // General Modal builders (Dummy modal targets to complete settings / inputs CRUD)
-function openEmissionFactorModal(id = null) {
+async function openEmissionFactorModal(id = null) {
   let ef = { activity: '', scope: 'Scope 1', value: '', unit: '', status: 'Active' };
+
+  if (id) {
+    try {
+      const res = await fetch(`${API_BASE}/emission-factors`);
+      const allFactors = await res.json();
+      const found = allFactors.find((item) => item.id === id);
+      if (found) ef = { ...found };
+    } catch (err) {
+      console.error('Unable to load emission factor for edit:', err);
+      showToast('Unable to load existing factor. Please try again.', 'danger');
+    }
+  }
+
   const html = `
     <form onsubmit="submitEfForm(event, ${id ? `'${id}'` : 'null'})">
       <div class="form-group">
@@ -2533,18 +2584,18 @@ function openEmissionFactorModal(id = null) {
       <div class="form-group">
         <label>Scope Group</label>
         <select id="ef-sc" class="styled-select">
-          <option value="Scope 1">Scope 1</option>
-          <option value="Scope 2">Scope 2</option>
-          <option value="Scope 3">Scope 3</option>
+          <option value="Scope 1" ${ef.scope === 'Scope 1' ? 'selected' : ''}>Scope 1</option>
+          <option value="Scope 2" ${ef.scope === 'Scope 2' ? 'selected' : ''}>Scope 2</option>
+          <option value="Scope 3" ${ef.scope === 'Scope 3' ? 'selected' : ''}>Scope 3</option>
         </select>
       </div>
       <div class="form-group">
         <label>Value</label>
-        <input type="number" id="ef-val" class="styled-input" required step="0.01">
+        <input type="number" id="ef-val" class="styled-input" required step="0.01" value="${ef.value}">
       </div>
       <div class="form-group">
         <label>Unit</label>
-        <input type="text" id="ef-un" class="styled-input" placeholder="e.g. Liter" required>
+        <input type="text" id="ef-un" class="styled-input" placeholder="e.g. Liter" required value="${ef.unit}">
       </div>
       <button type="submit" class="btn-sketch btn-emerald w-100">Save Factor</button>
     </form>
@@ -2566,43 +2617,69 @@ async function submitEfForm(e, id) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
   });
+
   if (res.ok) {
     closeModal();
     showToast('Emission Factor configured.', 'success');
     refreshView();
+    return;
   }
+
+  const errorData = await res.json().catch(() => ({ error: 'Unable to save emission factor.' }));
+  console.error('Emission factor save failed:', res.status, errorData);
+  showToast(`${errorData.error || 'Unable to save emission factor.'} (${res.status})`, 'danger');
 }
 
-function openProductModal() {
+async function openProductModal(id = null) {
+  let product = { name: '', code: '', carbonFootprint: '', recyclability: '', ethicalSourcing: 'Yes', status: 'Active' };
+  let modalTitle = 'Add Product Profile';
+  let submitLabel = 'Register Product Profile';
+
+  if (id) {
+    try {
+      const res = await fetch(`${API_BASE}/products`);
+      const products = await res.json();
+      const found = products.find((item) => item.id === id);
+      if (found) {
+        product = { ...found };
+        modalTitle = 'Edit Product Profile';
+        submitLabel = 'Save Product Profile';
+      }
+    } catch (err) {
+      console.error('Unable to load product for edit:', err);
+      showToast('Unable to load selected product. Please try again.', 'danger');
+    }
+  }
+
   const html = `
-    <form onsubmit="submitProductForm(event)">
+    <form onsubmit="submitProductForm(event, ${id ? `'${id}'` : 'null'})">
       <div class="form-group">
         <label>Name</label>
-        <input type="text" id="p-name" class="styled-input" required>
+        <input type="text" id="p-name" class="styled-input" required value="${product.name}">
       </div>
       <div class="form-group">
         <label>Code</label>
-        <input type="text" id="p-code" class="styled-input" required>
+        <input type="text" id="p-code" class="styled-input" required value="${product.code}">
       </div>
       <div class="form-group">
         <label>Carbon Footprint (kg)</label>
-        <input type="number" id="p-carb" class="styled-input" required>
+        <input type="number" id="p-carb" class="styled-input" required value="${product.carbonFootprint}">
       </div>
       <div class="form-group">
         <label>Recyclability (%)</label>
-        <input type="number" id="p-rec" class="styled-input" min="0" max="100" required>
+        <input type="number" id="p-rec" class="styled-input" min="0" max="100" required value="${product.recyclability}">
       </div>
       <div class="form-group">
         <label>Ethical Sourcing (Yes/No)</label>
-        <input type="text" id="p-eth" class="styled-input" placeholder="Yes" required>
+        <input type="text" id="p-eth" class="styled-input" placeholder="Yes" required value="${product.ethicalSourcing}">
       </div>
-      <button type="submit" class="btn-sketch btn-emerald w-100">Register Product Profile</button>
+      <button type="submit" class="btn-sketch btn-emerald w-100">${submitLabel}</button>
     </form>
   `;
-  openModal('Add Product Profile', html);
+  openModal(modalTitle, html);
 }
 
-async function submitProductForm(e) {
+async function submitProductForm(e, id = null) {
   e.preventDefault();
   const payload = {
     name: document.getElementById('p-name').value,
@@ -2612,16 +2689,22 @@ async function submitProductForm(e) {
     ethicalSourcing: document.getElementById('p-eth').value,
     status: 'Active'
   };
-  const res = await fetch(`${API_BASE}/products`, {
-    method: 'POST',
+  const res = await fetch(id ? `${API_BASE}/products/${id}` : `${API_BASE}/products`, {
+    method: id ? 'PUT' : 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
   });
+
   if (res.ok) {
     closeModal();
-    showToast('Product registered.', 'success');
+    showToast(id ? 'Product updated.' : 'Product registered.', 'success');
     refreshView();
+    return;
   }
+
+  const errorData = await res.json().catch(() => ({ error: 'Unable to save product.' }));
+  console.error('Product save failed:', res.status, errorData);
+  showToast(`${errorData.error || 'Unable to save product.'} (${res.status})`, 'danger');
 }
 
 function openCarbonTxModal() {
@@ -2912,15 +2995,23 @@ async function submitChallengeForm(e) {
     deadline: document.getElementById('ch-deadline').value,
     status: document.getElementById('ch-status').value
   };
-  const res = await fetch(`${API_BASE}/challenges`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
-  if (res.ok) {
-    closeModal();
-    showToast('New Challenge registered.', 'success');
-    refreshView();
+  try {
+    const res = await fetch(`${API_BASE}/challenges`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      closeModal();
+      showToast('New Challenge registered.', 'success');
+      refreshView();
+    } else {
+      const err = await res.json().catch(() => ({ error: 'Server error.' }));
+      showToast(err.error || 'Failed to create challenge.', 'danger');
+    }
+  } catch (err) {
+    console.error(err);
+    showToast('Network error. Could not create challenge.', 'danger');
   }
 }
 
@@ -2957,15 +3048,23 @@ async function submitBadgeForm(e) {
     unlockRule: document.getElementById('b-rule').value,
     icon: document.getElementById('b-icon').value
   };
-  const res = await fetch(`${API_BASE}/badges`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
-  if (res.ok) {
-    closeModal();
-    showToast('Achievement badge registered.', 'success');
-    refreshView();
+  try {
+    const res = await fetch(`${API_BASE}/badges`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      closeModal();
+      showToast('Achievement badge registered.', 'success');
+      refreshView();
+    } else {
+      const err = await res.json().catch(() => ({ error: 'Server error.' }));
+      showToast(err.error || 'Failed to create badge.', 'danger');
+    }
+  } catch (err) {
+    console.error(err);
+    showToast('Network error. Could not create badge.', 'danger');
   }
 }
 
@@ -3003,15 +3102,23 @@ async function submitRewardForm(e) {
     stock: parseInt(document.getElementById('r-stk').value, 10),
     status: 'Active'
   };
-  const res = await fetch(`${API_BASE}/rewards`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
-  if (res.ok) {
-    closeModal();
-    showToast('Reward item published.', 'success');
-    refreshView();
+  try {
+    const res = await fetch(`${API_BASE}/rewards`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      closeModal();
+      showToast('Reward item published.', 'success');
+      refreshView();
+    } else {
+      const err = await res.json().catch(() => ({ error: 'Server error.' }));
+      showToast(err.error || 'Failed to add reward.', 'danger');
+    }
+  } catch (err) {
+    console.error(err);
+    showToast('Network error. Could not add reward.', 'danger');
   }
 }
 
